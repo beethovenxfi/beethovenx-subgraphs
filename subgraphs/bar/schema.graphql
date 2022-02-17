@@ -1,0 +1,66 @@
+# Bar
+type Bar @entity {
+  # Contract address
+  id: ID!
+
+  address: Bytes!
+
+  # Decimals
+  decimals: Int!
+
+  # Name
+  name: String!
+
+  # Vesting token
+  vestingToken: Bytes!
+
+  # Symbol
+  symbol: String!
+
+  # Total fBeets supply
+  totalSupply: BigDecimal!
+
+  # Ratio fBeets per Sushi
+  ratio: BigDecimal!
+
+  # fBeets minted
+  fBeetsMinted: BigDecimal!
+
+  # fBeets burned
+  fBeetsBurned: BigDecimal!
+
+  vestingTokenStaked: BigDecimal!
+
+  sharedVestingTokenRevenue: BigDecimal!
+
+  # Users in the bar
+  users: [User!]! @derivedFrom(field: "bar")
+
+  block: BigInt!
+
+  timestamp: BigInt!
+}
+
+# User
+type User @entity {
+  # ID
+  id: ID!
+
+  address: Bytes!
+
+  # Bar
+  bar: Bar
+
+  # fBeets (balance)
+  fBeets: BigDecimal!
+
+  vestingTokenOut: BigDecimal!
+
+  vestingTokenIn: BigDecimal!
+
+  vestingTokenHarvested: BigDecimal!
+
+  block: BigInt!
+
+  timestamp: BigInt!
+}

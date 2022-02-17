@@ -1,0 +1,24 @@
+{
+    "name": "masterchefV2",
+    "private": true,
+    "license": "MIT",
+    "version": "1.0.0",
+    "author": "BeethovenX",
+    "scripts": {
+        "codegen": "graph codegen subgraph.yaml",
+        "build": "graph build subgraph.yaml",
+        "create-local": "graph create --node http://localhost:8020/",
+        "remove-local": "graph remove --node http://localhost:8020/ beetx-subgraph",
+        "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 beetx-subgraph",
+        "deploy:fantom-eu": "graph deploy masterchef subgraph.yaml --ipfs  http://eu-node.beets-ftm-node.com:5001 --node  http://eu-node.beets-ftm-node.com:8020/",
+        "deploy:fantom-canada": "graph deploy masterchef subgraph.yaml --ipfs http://ca-node.beets-ftm-node.com:5001 --node  http://ca-node.beets-ftm-node.com:8020/",
+        "prepare:rinkeby": "mustache config/rinkeby.json template.yaml > subgraph.yaml",
+        "prepare:fantom": "mustache config/fantom.json template.yaml > subgraph.yaml"
+    },
+    "dependencies": {
+        "@graphprotocol/graph-cli": "^0.26.0",
+        "@graphprotocol/graph-ts": "^0.24.1",
+        "prettier": "^2.0.0",
+        "typescript": "^4.0.0"
+    }
+}
