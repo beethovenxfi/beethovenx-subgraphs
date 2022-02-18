@@ -1,0 +1,37 @@
+specVersion: 0.0.3
+description: Bar
+repository: https://github.com/beethovenxfi/beethovenx-token-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Locker
+    network: mainnet
+    source:
+      address: '{{ address }}'
+      abi: FBeetsLocker
+      startBlock: {{ startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Locker
+        - Rewarder
+        - User
+        - LockingPeriod
+      abis:
+        - name: FBeetsLocker
+          file: ./packages/abis/FBeetsLocker.json
+      eventHandlers:
+        - event: Locked(indexed address,uint256,uint256)
+          handler: locked
+        - event: Withdrawn(indexed address,uint256,bool)
+          handler: withdrawn
+        - event: RewardAdded(indexed address,uint256,uint256)
+          handler: rewardAdded
+        - event: KickReward(indexed address,indexed address,uint256)
+          handler: kickReward
+        - event: RewardPaid(indexed address,indexed address,uint256)
+          handler: rewardPaid
+      file: ./src/mappings/locker.ts
