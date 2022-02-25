@@ -1,7 +1,7 @@
 import { dataSource, ethereum } from "@graphprotocol/graph-ts/index";
 import { Bar } from "../../generated/schema";
 import { Bar as BarContract } from "../../generated/BeetsBar/Bar";
-import { BIG_DECIMAL_ZERO } from "../../../../packages/constants";
+import { BIG_DECIMAL_ZERO } from "../constants";
 
 export function getBar(block: ethereum.Block): Bar {
   let bar = Bar.load(dataSource.address().toHex());

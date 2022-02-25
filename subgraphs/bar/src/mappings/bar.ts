@@ -3,7 +3,7 @@ import {
   BIG_DECIMAL_1E18,
   BIG_DECIMAL_ONE,
   BIG_DECIMAL_ZERO,
-} from "const";
+} from "../constants";
 import { Address, log } from "@graphprotocol/graph-ts";
 import {
   Bar as BarContract,

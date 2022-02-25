@@ -1,6 +1,6 @@
-import { User } from "../../generated/schema";
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { BIG_DECIMAL_ZERO } from "const";
+import { BIG_DECIMAL_ZERO } from "../constants";
+import { User } from "../../generated/schema";
 
 export function getUser(address: Address, block: ethereum.Block): User {
   const uid = address.toHex();
@@ -8,6 +8,7 @@ export function getUser(address: Address, block: ethereum.Block): User {
 
   if (user === null) {
     user = new User(uid);
+    user.address = address;
     user.totalLockedAmount = BIG_DECIMAL_ZERO;
     user.collectedKickRewardAmount = BIG_DECIMAL_ZERO;
     user.totalLostThroughKick = BIG_DECIMAL_ZERO;

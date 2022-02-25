@@ -20,9 +20,9 @@ dataSources:
         - User
       abis:
         - name: Bar
-          file: ./packages/abis/BeetsBar.json
+          file: ./abis/BeetsBar.json
         - name: ERC20
-          file: ./packages/abis/ERC20.json
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: transfer

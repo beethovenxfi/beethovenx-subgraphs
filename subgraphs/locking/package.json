@@ -1,18 +1,31 @@
 {
-    "name": "locker",
-    "license": "MIT",
-    "version": "1.0.0",
-    "author": "BeethovenX",
-    "scripts": {
-        "codegen": "graph codegen subgraph.yaml",
-        "build": "graph build subgraph.yaml",
-        "deploy-studio": "graph deploy --studio sushi---sushibar",
-        "create-local": "graph create --node http://localhost:8020/ /sushiswap/sushiswap",
-        "remove-local": "graph remove --node http://localhost:8020/ /sushiswap/sushiswap",
-        "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 /sushiswap/sushiswap",
-        "prepare:rinkeby": "mustache config/rinkeby.json template.yaml > subgraph.yaml",
-        "prepare:fantom": "mustache config/fantom.json template.yaml > subgraph.yaml",
-        "deploy:fantom-eu": "graph deploy beets-bar subgraph.yaml --ipfs  http://eu-node.beets-ftm-node.com:5001 --node  http://eu-node.beets-ftm-node.com:8020/",
-        "deploy:fantom-canada": "graph deploy beets-bar subgraph.yaml --ipfs http://ca-node.beets-ftm-node.com:5001 --node  http://ca-node.beets-ftm-node.com:8020/"
-    }
+  "name": "beethovenx-locking-subgraph",
+  "version": "1.0.0",
+  "description": "Subgraph for locking contract",
+  "main": "index.js",
+  "author": "0xSkly",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "codegen": "graph codegen subgraph.yaml",
+    "build": "graph build subgraph.yaml",
+    "deploy-studio": "graph deploy --studio sushi---sushibar",
+    "create-local": "graph create --node http://localhost:8020/ /sushiswap/sushiswap",
+    "remove-local": "graph remove --node http://localhost:8020/ /sushiswap/sushiswap",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 /sushiswap/sushiswap",
+    "prepare:rinkeby": "mustache config/rinkeby.json template.yaml > subgraph.yaml",
+    "prepare:fantom": "mustache config/fantom.json template.yaml > subgraph.yaml",
+    "deploy:fantom-eu": "graph deploy beets-bar subgraph.yaml --ipfs  http://eu-node.beets-ftm-node.com:5001 --node  http://eu-node.beets-ftm-node.com:8020/",
+    "deploy:fantom-canada": "graph deploy beets-bar subgraph.yaml --ipfs http://ca-node.beets-ftm-node.com:5001 --node  http://ca-node.beets-ftm-node.com:8020/"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.26.0",
+    "@graphprotocol/graph-ts": "^0.24.1",
+    "matchstick-as": "^0.3.0",
+    "ejs": "^3.1.6",
+    "handlebars": "^4.7.7",
+    "mustache": "^4.2.0",
+    "prettier": "^2.0.0",
+    "typescript": "^4.0.0"
+  }
 }

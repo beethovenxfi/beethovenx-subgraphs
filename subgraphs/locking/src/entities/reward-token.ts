@@ -1,8 +1,8 @@
 import { ethereum } from "@graphprotocol/graph-ts/index";
 import { RewardToken } from "../../generated/schema";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../../../../packages/constants";
 import { Address } from "@graphprotocol/graph-ts";
 import { ERC20 } from "../../generated/Locker/ERC20";
+import {BIG_DECIMAL_ZERO, BIG_INT_ZERO} from "../constants";
 
 export const getRewardToken = (
   address: Address,

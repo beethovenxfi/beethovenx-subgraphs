@@ -10,6 +10,7 @@ type Locker @entity {
   lockDuration: BigInt!
   # percentage where 1000 is 100%
   kickRewardPerEpoch: BigInt!
+  # number of epochs until a user can be kicked for a reward
   kickRewardEpochDelay: BigInt!
   rewardTokens: [RewardToken!]! @derivedFrom(field: "locker")
   users: [User!]! @derivedFrom(field: "locker")
@@ -35,6 +36,7 @@ type RewardToken @entity {
 type User @entity {
   # address
   id: ID!
+  address: Bytes!
   locker: Locker!
   totalLockedAmount: BigDecimal!
   lockingPeriods: [LockingPeriod!]! @derivedFrom(field: "user")

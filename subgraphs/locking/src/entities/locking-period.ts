@@ -1,7 +1,7 @@
 import { ethereum } from "@graphprotocol/graph-ts/index";
-import { BIG_DECIMAL_ZERO } from "../../../../packages/constants";
 import { LockingPeriod } from "../../generated/schema";
 import { Address, BigInt } from "@graphprotocol/graph-ts";
+import { BIG_DECIMAL_ZERO } from "../constants";
 
 export function getLockingPeriod(
   userAddress: Address,

@@ -8,9 +8,9 @@ dataSources:
     name: Locker
     network: mainnet
     source:
-      address: '{{ address }}'
+      address: '0xfcef8a994209d6916EB2C86cDD2AFD60Aa6F54b1'
       abi: FBeetsLocker
-      startBlock: {{ startBlock }}
+      startBlock:
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
