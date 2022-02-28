@@ -40,7 +40,7 @@ type User @entity {
   locker: Locker!
   totalLockedAmount: BigDecimal!
   lockingPeriods: [LockingPeriod!]! @derivedFrom(field: "user")
-  claimedRewards: [Reward!]! @derivedFrom(field: "user")
+  claimedRewards: [ClaimedReward!]! @derivedFrom(field: "user")
   collectedKickRewardAmount: BigDecimal!
   totalLostThroughKick: BigDecimal!
   block: BigInt!
@@ -57,7 +57,7 @@ type LockingPeriod @entity {
   timestamp: BigInt!
 }
 
-type Reward @entity {
+type ClaimedReward @entity {
   id: ID!
   user: User!
   amount: BigDecimal!

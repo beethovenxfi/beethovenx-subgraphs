@@ -9,7 +9,7 @@ import {
 import { getLockingPeriod } from "../entities/locking-period";
 import { getRewardToken } from "../entities/reward-token";
 import { BigDecimal } from "@graphprotocol/graph-ts";
-import { getReward } from "../entities/reward";
+import { getClaimedReward } from "../entities/claimed-reward";
 import { getLocker } from "../entities/locker";
 import { getUser } from "../entities/user";
 import { BIG_DECIMAL_1E18 } from "../constants";
@@ -49,7 +49,7 @@ export function withdrawn(event: Withdrawn): void {
 export function rewardAdded(event: RewardAdded): void {
   const rewardToken = getRewardToken(event.params._token, event.block);
 
-  const decimalDivisor = BigDecimal.fromString(` 1e${rewardToken.decimals}`);
+  const decimalDivisor = BigDecimal.fromString(`1e${rewardToken.decimals}`);
   rewardToken.totalRewardAmount = rewardToken.totalRewardAmount.plus(
     event.params._reward.divDecimal(decimalDivisor)
   );
@@ -61,8 +61,8 @@ export function rewardAdded(event: RewardAdded): void {
 export function rewardPaid(event: RewardPaid): void {
   const rewardToken = getRewardToken(event.params._rewardsToken, event.block);
 
-  const decimalDivisor = BigDecimal.fromString(` 1e${rewardToken.decimals}`);
-  const reward = getReward(
+  const decimalDivisor = BigDecimal.fromString(`1e${rewardToken.decimals}`);
+  const reward = getClaimedReward(
     event.params._user,
     event.params._rewardsToken,
     event.block

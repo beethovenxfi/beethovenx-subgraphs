@@ -1,4 +1,4 @@
-import { dataSource, ethereum, log } from "@graphprotocol/graph-ts/index";
+import { dataSource, ethereum } from "@graphprotocol/graph-ts/index";
 import { Locker } from "../../generated/schema";
 import { FBeetsLocker as LockerContract } from "../../generated/Locker/FBeetsLocker";
 import { BIG_DECIMAL_ZERO } from "../constants";

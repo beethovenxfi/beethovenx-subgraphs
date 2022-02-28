@@ -9,7 +9,6 @@ export function getLockingPeriod(
   block: ethereum.Block
 ): LockingPeriod {
   const lockingPeriodId = `${userAddress.toHex()}-${epoch.toHex()}`;
-
   let lockingPeriod = LockingPeriod.load(lockingPeriodId);
 
   if (lockingPeriod === null) {
