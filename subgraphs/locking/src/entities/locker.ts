@@ -2,11 +2,11 @@ import { dataSource, ethereum } from "@graphprotocol/graph-ts/index";
 import { Locker } from "../../generated/schema";
 import { FBeetsLocker as LockerContract } from "../../generated/Locker/FBeetsLocker";
 import { BIG_DECIMAL_ZERO } from "../constants";
-import { Address } from "@graphprotocol/graph-ts";
 
 export function getLocker(block: ethereum.Block): Locker {
-  //todo: change back - hacky so it works for testing...
-  const dataSourceAddress = Address.fromString(dataSource.address().toString());
+  //todo: change for tests, see issue https://github.com/LimeChain/matchstick/issues/297
+  // const dataSourceAddress = Address.fromString(dataSource.address().toString());
+  const dataSourceAddress = dataSource.address();
   let locker = Locker.load(dataSourceAddress.toHex());
   if (locker === null) {
     const contract: LockerContract = LockerContract.bind(dataSourceAddress);

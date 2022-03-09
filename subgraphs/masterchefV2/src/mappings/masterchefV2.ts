@@ -10,7 +10,7 @@ import {
 } from '../../generated/MasterChefV2/MasterChefV2'
 
 import {Address, log} from '@graphprotocol/graph-ts'
-import {ACC_BEETX_PRECISION, BIG_INT_ONE, BIG_INT_ZERO} from 'const'
+import {ACC_BEETX_PRECISION, BIG_INT_ONE, BIG_INT_ZERO} from '../constants'
 
 import {getMasterChef, getPool, getRewarder, getUser, updateRewarder} from '../entities'
 

@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Locker
-    network: mainnet
+    network: {{ network }}
     source:
       address: '{{ address }}'
       abi: FBeetsLocker

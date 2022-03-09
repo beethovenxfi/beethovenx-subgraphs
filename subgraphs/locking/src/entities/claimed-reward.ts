@@ -1,7 +1,7 @@
 import { ethereum } from "@graphprotocol/graph-ts/index";
 import { ClaimedReward } from "../../generated/schema";
 import { Address } from "@graphprotocol/graph-ts";
-import {BIG_DECIMAL_ZERO} from "../constants";
+import { BIG_DECIMAL_ZERO } from "../constants";
 
 export const getClaimedReward = (
   userAddress: Address,
@@ -14,7 +14,8 @@ export const getClaimedReward = (
   if (reward === null) {
     reward = new ClaimedReward(id);
     reward.token = rewardToken;
-    reward.amount = BIG_DECIMAL_ZERO
+    reward.amount = BIG_DECIMAL_ZERO;
+    reward.user = userAddress.toHex();
   }
   reward.block = block.number;
   reward.timestamp = block.timestamp;

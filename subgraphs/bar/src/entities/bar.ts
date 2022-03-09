@@ -2,11 +2,14 @@ import { dataSource, ethereum } from "@graphprotocol/graph-ts/index";
 import { Bar } from "../../generated/schema";
 import { Bar as BarContract } from "../../generated/BeetsBar/Bar";
 import { BIG_DECIMAL_ZERO } from "../constants";
+import { log } from "@graphprotocol/graph-ts";
 
 export function getBar(block: ethereum.Block): Bar {
+  log.info("load bar", []);
   let bar = Bar.load(dataSource.address().toHex());
 
   if (bar === null) {
+    log.info("create bar- bar, load contract", []);
     const contract: BarContract = BarContract.bind(dataSource.address());
     bar = new Bar(dataSource.address().toHex());
     bar.address = dataSource.address();
@@ -23,7 +26,9 @@ export function getBar(block: ethereum.Block): Bar {
   }
   bar.block = block.number;
   bar.timestamp = block.timestamp;
+  log.info("save bar", []);
   bar.save();
+  log.info("save bar done", []);
 
   return bar as Bar;
 }

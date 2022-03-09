@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Locker
-    network: mainnet
+    network: rinkeby
     source:
-      address: '0xfcef8a994209d6916EB2C86cDD2AFD60Aa6F54b1'
+      address: '0x7372FdD6e5349b187302dF04A6B34ea644a79cc0'
       abi: FBeetsLocker
-      startBlock:
+      startBlock: 10292480
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

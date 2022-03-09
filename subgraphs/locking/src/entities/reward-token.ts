@@ -1,8 +1,8 @@
-import { ethereum } from "@graphprotocol/graph-ts/index";
+import { dataSource, ethereum } from "@graphprotocol/graph-ts/index";
 import { RewardToken } from "../../generated/schema";
 import { Address } from "@graphprotocol/graph-ts";
 import { ERC20 } from "../../generated/Locker/ERC20";
-import {BIG_DECIMAL_ZERO, BIG_INT_ZERO} from "../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
 
 export const getRewardToken = (
   address: Address,
@@ -18,6 +18,7 @@ export const getRewardToken = (
     rewardToken.totalRewardAmount = BIG_DECIMAL_ZERO;
     rewardToken.rewardRate = BIG_DECIMAL_ZERO;
     rewardToken.rewardPeriodFinish = BIG_INT_ZERO;
+    rewardToken.locker = dataSource.address().toHex();
   }
   rewardToken.block = block.number;
   rewardToken.timestamp = block.timestamp;

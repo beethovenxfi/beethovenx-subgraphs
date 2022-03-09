@@ -4,7 +4,7 @@ import {
   BIG_DECIMAL_ONE,
   BIG_DECIMAL_ZERO,
 } from "../constants";
-import { Address, log } from "@graphprotocol/graph-ts";
+import { Address, dataSource, log } from "@graphprotocol/graph-ts";
 import {
   Bar as BarContract,
   Enter,
@@ -16,8 +16,9 @@ import { getBar, getUser } from "../entities";
 import { ERC20 } from "../../generated/BeetsBar/ERC20";
 
 export function enter(event: Enter): void {
+  log.warning("Enter - get bar", []);
   const bar = getBar(event.block);
-  const barContract = BarContract.bind(bar.address as Address);
+  const barContract = BarContract.bind(dataSource.address());
   const user = getUser(event.params.user, event.block);
 
   const vestingInAmount =
@@ -29,8 +30,8 @@ export function enter(event: Enter): void {
   user.save();
 
   bar.totalSupply = barContract.totalSupply().divDecimal(BIG_DECIMAL_1E18);
-  bar.vestingTokenStaked = ERC20.bind(bar.vestingToken as Address)
-    .balanceOf(bar.address as Address)
+  bar.vestingTokenStaked = ERC20.bind(changetype<Address>(bar.vestingToken))
+    .balanceOf(dataSource.address())
     .divDecimal(BIG_DECIMAL_1E18);
   bar.ratio = bar.vestingTokenStaked.div(bar.totalSupply);
   bar.fBeetsMinted = bar.fBeetsMinted.plus(mintAmount);
@@ -41,7 +42,7 @@ export function leave(event: Leave): void {
   const bar = getBar(event.block);
   const user = getUser(event.params.user, event.block);
 
-  const barContract = BarContract.bind(bar.address as Address);
+  const barContract = BarContract.bind(changetype<Address>(bar.address));
 
   const vestingOutAmount =
     event.params.vestingOutAmount.divDecimal(BIG_DECIMAL_1E18);
@@ -54,8 +55,8 @@ export function leave(event: Leave): void {
   user.save();
 
   bar.totalSupply = barContract.totalSupply().divDecimal(BIG_DECIMAL_1E18);
-  bar.vestingTokenStaked = ERC20.bind(bar.vestingToken as Address)
-    .balanceOf(bar.address as Address)
+  bar.vestingTokenStaked = ERC20.bind(changetype<Address>(bar.vestingToken))
+    .balanceOf(dataSource.address())
     .divDecimal(BIG_DECIMAL_1E18);
   if (bar.totalSupply.equals(BIG_DECIMAL_ZERO)) {
     bar.ratio = BIG_DECIMAL_ONE;
@@ -71,8 +72,8 @@ export function shareRevenue(event: ShareRevenue): void {
 
   const sharedRevenueAmount = event.params.amount.divDecimal(BIG_DECIMAL_1E18);
 
-  bar.vestingTokenStaked = ERC20.bind(bar.vestingToken as Address)
-    .balanceOf(bar.address as Address)
+  bar.vestingTokenStaked = ERC20.bind(changetype<Address>(bar.vestingToken))
+    .balanceOf(dataSource.address())
     .divDecimal(BIG_DECIMAL_1E18);
   bar.ratio = bar.vestingTokenStaked.div(bar.totalSupply);
   bar.sharedVestingTokenRevenue =
@@ -81,6 +82,7 @@ export function shareRevenue(event: ShareRevenue): void {
 }
 
 export function transfer(event: TransferEvent): void {
+  log.warning("in transfer.......", []);
   const transferAmount = event.params.value.divDecimal(BIG_DECIMAL_1E18);
 
   // only handle user to user transfers

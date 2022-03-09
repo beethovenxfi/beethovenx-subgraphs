@@ -12,7 +12,7 @@ type Locker @entity {
   kickRewardPerEpoch: BigInt!
   # number of epochs until a user can be kicked for a reward
   kickRewardEpochDelay: BigInt!
-  rewardTokens: [RewardToken!]! @derivedFrom(field: "locker")
+  rewardTokens: [RewardToken!] @derivedFrom(field: "locker")
   users: [User!]! @derivedFrom(field: "locker")
   block: BigInt!
   timestamp: BigInt!
