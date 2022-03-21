@@ -8,9 +8,9 @@ dataSources:
     name: Locker
     network: rinkeby
     source:
-      address: '0x7372FdD6e5349b187302dF04A6B34ea644a79cc0'
+      address: '0x4E3dB1E512d1cf0d4e8700bd281df71fbFcf257B'
       abi: FBeetsLocker
-      startBlock: 10292480
+      startBlock: 10333070
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
