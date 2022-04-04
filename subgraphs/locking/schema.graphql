@@ -1,0 +1,67 @@
+type Locker @entity {
+  # address
+  id: ID!
+  address: Bytes!
+  decimals: Int!
+  name: String!
+  symbol: String!
+  totalLockedAmount: BigDecimal!
+  epochDuration: BigInt!
+  lockDuration: BigInt!
+  # percentage where 1000 is 100%
+  kickRewardPerEpoch: BigInt!
+  # number of epochs until a user can be kicked for a reward
+  kickRewardEpochDelay: BigInt!
+  rewardTokens: [RewardToken!] @derivedFrom(field: "locker")
+  users: [User!]! @derivedFrom(field: "locker")
+  block: BigInt!
+  timestamp: BigInt!
+}
+
+type RewardToken @entity {
+  # address
+  id: ID!
+  locker: Locker!
+  rewardToken: Bytes!
+  decimals: Int!
+  totalRewardAmount: BigDecimal!
+  # rewards / second (only when reward period is not finished)
+  rewardRate: BigDecimal!
+  # timestamp when rewards end
+  rewardPeriodFinish: BigInt!
+  block: BigInt!
+  timestamp: BigInt!
+}
+
+type User @entity {
+  # address
+  id: ID!
+  address: Bytes!
+  locker: Locker!
+  totalLockedAmount: BigDecimal!
+  lockingPeriods: [LockingPeriod!]! @derivedFrom(field: "user")
+  claimedRewards: [ClaimedReward!]! @derivedFrom(field: "user")
+  collectedKickRewardAmount: BigDecimal!
+  totalLostThroughKick: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+}
+
+type LockingPeriod @entity {
+  id: ID!
+  user: User!
+  lockAmount: BigDecimal!
+  # epoch is resembled by timestamp of start time
+  epoch: BigInt!
+  block: BigInt!
+  timestamp: BigInt!
+}
+
+type ClaimedReward @entity {
+  id: ID!
+  user: User!
+  amount: BigDecimal!
+  token: Bytes!
+  block: BigInt!
+  timestamp: BigInt!
+}

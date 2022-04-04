@@ -1,6 +1,6 @@
 import { User } from "../../generated/schema";
 import { Address, dataSource, ethereum } from "@graphprotocol/graph-ts";
-import { BIG_DECIMAL_ZERO } from "const";
+import { BIG_DECIMAL_ZERO } from "../constants";
 
 export function getUser(address: Address, block: ethereum.Block): User {
   const uid = address.toHex();

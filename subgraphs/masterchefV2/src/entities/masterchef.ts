@@ -1,6 +1,9 @@
 import { MasterChef } from "../../generated/schema";
 import { dataSource, ethereum } from "@graphprotocol/graph-ts";
-import { BIG_INT_ZERO, MASTER_CHEF_INITIAL_BEETS_PER_BLOCK } from "const";
+import {
+  BIG_INT_ZERO,
+  MASTER_CHEF_INITIAL_BEETS_PER_BLOCK,
+} from "../constants";
 
 export function getMasterChef(block: ethereum.Block): MasterChef {
   let masterChef = MasterChef.load(dataSource.address().toHex());
