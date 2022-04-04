@@ -2,9 +2,9 @@ type MasterChef @entity {
   # Contract address
   id: ID!
 
-#  owner: Bytes!
-#  devAddress: Bytes!
-#  treasuryAddress: Bytes!
+  #  owner: Bytes!
+  #  devAddress: Bytes!
+  #  treasuryAddress: Bytes!
 
   beetsPerBlock: BigInt!
   totalAllocPoint: BigInt!
@@ -39,11 +39,21 @@ type Pool @entity {
   block: BigInt!
 }
 
+type RewardToken @entity {
+  id: ID!
+  rewarder: Rewarder
+  token: Bytes!
+  decimals: Int!
+  symbol: String!
+  rewardPerSecond: BigInt!
+  timestamp: BigInt!
+  block: BigInt!
+}
+
 type Rewarder @entity {
   # address
   id: ID!
-  rewardToken: Bytes!
-  rewardPerSecond: BigInt!
+  rewardTokens: [RewardToken!]! @derivedFrom(field: "rewarder")
 
   timestamp: BigInt!
   block: BigInt!
