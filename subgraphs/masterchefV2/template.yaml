@@ -13,7 +13,7 @@ dataSources:
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/masterchefV2.ts
       entities:
@@ -55,7 +55,7 @@ templates:
       abi: SingleTokenRewarder
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/single-token-rewarder.ts
       entities:
@@ -65,9 +65,13 @@ templates:
           file: ./abis/SingleTokenRewarder.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: MasterChefV2
+          file: ./abis/MasterChefV2.json
       eventHandlers:
         - event: LogRewardPerSecond(uint256)
           handler: logRewardPerSecond
+        - event: LogOnReward(indexed address,indexed uint256,uint256,indexed address)
+          handler: logOnReward
   - kind: ethereum/contract
     name: MultiTokenRewarder
     network: {{ network }}
@@ -75,7 +79,7 @@ templates:
       abi: MultiTokenRewarder
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/multi-token-rewarder.ts
       entities:
@@ -85,6 +89,10 @@ templates:
           file: ./abis/MultiTokenRewarder.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: MasterChefV2
+          file: ./abis/MasterChefV2.json
       eventHandlers:
         - event: LogRewardsPerSecond(address[],uint256[])
           handler: logRewardsPerSecond
+        - event: LogOnReward(indexed address,indexed uint256,address,uint256,indexed address)
+          handler: logOnReward

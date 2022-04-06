@@ -6,6 +6,7 @@ type MasterChef @entity {
   #  devAddress: Bytes!
   #  treasuryAddress: Bytes!
 
+  beets: Bytes!
   beetsPerBlock: BigInt!
   totalAllocPoint: BigInt!
 
@@ -59,6 +60,15 @@ type Rewarder @entity {
   block: BigInt!
 }
 
+type HarvestAction @entity {
+  id: ID!
+  user: User
+  token: Bytes!
+  amount: BigInt!
+  timestamp: BigInt!
+  block: BigInt!
+}
+
 type User @entity {
   # Pool id concatenated with user address
   id: ID!
@@ -69,6 +79,7 @@ type User @entity {
   amount: BigInt!
   rewardDebt: BigInt!
   beetsHarvested: BigInt!
+  harvests: [HarvestAction!]! @derivedFrom(field: "user")
 
   timestamp: BigInt!
   block: BigInt!
