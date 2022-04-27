@@ -10,8 +10,10 @@
     "create-local": "graph create --node http://localhost:8020/",
     "remove-local": "graph remove --node http://localhost:8020/ beetx-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 beetx-subgraph",
-    "deploy:fantom-eu": "graph deploy masterchefV2 subgraph.yaml --ipfs  http://eu-node.beets-ftm-node.com:5001 --node  http://eu-node.beets-ftm-node.com:8020/",
-    "deploy:fantom-canada": "graph deploy masterchefV2 subgraph.yaml --ipfs http://ca-node.beets-ftm-node.com:5001 --node  http://ca-node.beets-ftm-node.com:8020/",
+    "create:fantom-eu" : "graph create --node http://eu-node-v2.beets-ftm-node.com:8020/ masterchefV2",
+    "create:fantom-ca" : "graph create --node http://ca-node-v2.beets-ftm-node.com:8020/ masterchefV2",
+    "deploy:fantom-eu": "graph deploy masterchefV2 subgraph.yaml --ipfs  http://eu-node-v2.beets-ftm-node.com:5001 --node  http://eu-node-v2.beets-ftm-node.com:8020/",
+    "deploy:fantom-ca": "graph deploy masterchefV2 subgraph.yaml --ipfs http://ca-node-v2.beets-ftm-node.com:5001 --node  http://ca-node-v2.beets-ftm-node.com:8020/",
     "prepare:rinkeby": "mustache config/rinkeby.json template.yaml > subgraph.yaml",
     "prepare:fantom": "mustache config/fantom.json template.yaml > subgraph.yaml"
   },

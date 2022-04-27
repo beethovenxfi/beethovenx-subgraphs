@@ -12,8 +12,10 @@
         "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 /sushiswap/sushiswap",
         "prepare:rinkeby": "mustache config/rinkeby.json template.yaml > subgraph.yaml",
         "prepare:fantom": "mustache config/fantom.json template.yaml > subgraph.yaml",
-        "deploy:fantom-eu": "graph deploy beets-bar subgraph.yaml --ipfs  http://eu-node.beets-ftm-node.com:5001 --node  http://eu-node.beets-ftm-node.com:8020/",
-        "deploy:fantom-canada": "graph deploy beets-bar subgraph.yaml --ipfs http://ca-node.beets-ftm-node.com:5001 --node  http://ca-node.beets-ftm-node.com:8020/"
+        "create:fantom-eu" : "graph create --node http://eu-node-v2.beets-ftm-node.com:8020/ beets-bar",
+        "create:fantom-ca" : "graph create --node http://ca-node-v2.beets-ftm-node.com:8020/ beets-bar",
+        "deploy:fantom-eu": "graph deploy beets-bar subgraph.yaml --ipfs  http://eu-node-v2.beets-ftm-node.com:5001 --node  http://eu-node-v2.beets-ftm-node.com:8020/",
+        "deploy:fantom-ca": "graph deploy beets-bar subgraph.yaml --ipfs http://ca-node-v2.beets-ftm-node.com:5001 --node  http://ca-node-v2.beets-ftm-node.com:8020/"
     },
     "devDependencies": {
         "@graphprotocol/graph-cli": "^0.26.0",

@@ -6,7 +6,7 @@ import { MultiTokenRewarder as MultiTokenRewarderContract } from "../../generate
 import { MultiTokenRewarder as MultiTokenRewarderTemplate } from "../../generated/templates";
 
 import { Rewarder, RewardToken } from "../../generated/schema";
-import { ERC20 } from "../../../locking/generated/Locker/ERC20";
+import { ERC20 } from "../../generated/MasterChefV2/ERC20";
 
 export function getRewarder(address: Address, block: ethereum.Block): Rewarder {
   let rewarder = Rewarder.load(address.toHex());
