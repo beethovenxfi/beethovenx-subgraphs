@@ -162,6 +162,7 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
   user.save();
 
   const pool = getPool(event.params.pid, event.block);
+  pool.slpBalance = pool.slpBalance.minus(event.params.amount);
   pool.userCount = pool.userCount.minus(BIG_INT_ONE);
   pool.save();
 }

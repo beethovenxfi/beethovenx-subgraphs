@@ -1,0 +1,58 @@
+specVersion: 0.0.4
+description: Changelog
+repository: https://github.com/beethovenxfi/beethovenx-token-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MasterChef
+    network: {{ network }}
+    source:
+      address: "{{ chef-address }}"
+      abi: MasterChef
+      startBlock: {{ startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/masterchef-changes.ts
+      entities:
+        - EntityChangeEvent
+      abis:
+        - name: MasterChef
+          file: ./abis/MasterChef.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Deposit(indexed address,indexed uint256,uint256,indexed address)
+          handler: deposit
+        - event: Withdraw(indexed address,indexed uint256,uint256,indexed address)
+          handler: withdraw
+        - event: EmergencyWithdraw(indexed address,indexed uint256,uint256,indexed address)
+          handler: emergencyWithdraw
+  - kind: ethereum/contract
+    name: Vault
+    network: fantom
+    source:
+      address: "{{ vault-address }}"
+      abi: Vault
+      startBlock: {{ startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/vault-changes.ts
+      entities:
+        - EntityChangeEvent
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
+          handler: swap
+        - event: PoolBalanceChanged(indexed bytes32,indexed address,address[],int256[],uint256[])
+          handler: balanceChanged
+        - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256,int256)
+          handler: balanceManaged
