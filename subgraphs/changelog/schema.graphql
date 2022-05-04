@@ -1,0 +1,23 @@
+interface EntityChangeEvent {
+  id: Bytes!
+  action: String!
+  timestamp: BigInt!
+  block: BigInt!
+}
+
+type PoolChangeEvent implements EntityChangeEvent @entity(immutable:true) {
+  id: Bytes!
+  action: String!
+  timestamp: BigInt!
+  block: BigInt!
+  poolId: Bytes!
+}
+
+type FarmChangeEvent implements EntityChangeEvent @entity(immutable:true) {
+  id: Bytes!
+  action: String!
+  farmId: Int!
+  timestamp: BigInt!
+  block: BigInt!
+}
+
