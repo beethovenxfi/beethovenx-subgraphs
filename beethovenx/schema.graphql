@@ -1,54 +1,43 @@
 type MasterChef @entity {
-  # Contract address
   id: Bytes!
-
-  #  owner: Bytes!
-  #  devAddress: Bytes!
-  #  treasuryAddress: Bytes!
-
-  beets: Bytes!
-  beetsPerBlock: BigInt!
+  emissionToken: Token!
+  emissionPerBlock: BigInt!
   totalAllocPoint: BigInt!
-
   farms: [Farm!] @derivedFrom(field: "masterChef")
   poolCount: BigInt!
-
-  #history: [History!]! @derivedFrom(field: "masterChef")
-
   timestamp: BigInt!
   block: BigInt!
+
 }
 
 type Farm @entity {
   # Index of pool in poolInfo on MasterChef contract
   id: Bytes!
   masterChef: MasterChef!
-  pair: Bytes!
-
-  rewarder: Rewarder
-
+  token: Token!
   allocPoint: BigInt!
-  lastRewardBlock: BigInt!
-  accBeetsPerShare: BigDecimal!
-
   balance: BigDecimal!
-
+  rewarder: Rewarder
   users: [UserFarmBalance!]! @derivedFrom(field: "farm")
-  userCount: Int!
-
+  userCount: BigInt!
   timestamp: BigInt!
   block: BigInt!
 }
 
 type RewardToken @entity {
   id: Bytes!
+  token: Token!
   rewarder: Rewarder
-  token: Bytes!
-  decimals: Int!
-  symbol: String!
   rewardPerSecond: BigDecimal!
   timestamp: BigInt!
   block: BigInt!
+}
+
+type Token @entity(immutable: true) {
+  id: Bytes!
+  name: String!
+  decimals: Int!
+  symbol: String!
 }
 
 type Rewarder @entity(immutable: true) {
@@ -60,7 +49,7 @@ type Rewarder @entity(immutable: true) {
 type HarvestAction @entity(immutable: true) {
   id: Bytes!
   user: User
-  token: Bytes!
+  token: Token!
   amount: BigDecimal!
   timestamp: BigInt!
   block: BigInt!
@@ -80,50 +69,30 @@ type User @entity(immutable: true) {
   id: Bytes!
   address: Bytes!
   farms: [UserFarmBalance!]! @derivedFrom(field: "user")
-  vesting : [UserTokenVesting!]! @derivedFrom(field: "user")
+  governance: UserGovernanceTokenBalance @derivedFrom(field: "user")
   harvests: [HarvestAction!]! @derivedFrom(field: "user")
 }
 
-type UserTokenVesting @entity {
+type UserGovernanceTokenBalance @entity {
   id: Bytes!
   user: User!
-  bar: Bar!
+  token: GovernanceToken!
   balance: BigDecimal!
   block: BigInt!
   timestamp: BigInt!
 }
 
-type Bar @entity {
+type GovernanceToken @entity {
   id: Bytes!
-  address: Bytes!
-  decimals: Int!
-  name: String!
-  vestingToken: Bytes!
-  symbol: String!
+  token: Token!
+  vestingToken: Token!
   totalSupply: BigDecimal!
   ratio: BigDecimal!
-  fBeetsMinted: BigDecimal!
-  fBeetsBurned: BigDecimal!
-  vestingTokenStaked: BigDecimal!
+  sharesMinted: BigDecimal!
+  sharesBurned: BigDecimal!
+  vestingTokenBalance: BigDecimal!
   sharedVestingTokenRevenue: BigDecimal!
-  users: [UserFbeetsBalance!]! @derivedFrom(field: "bar")
-
+  users: [UserGovernanceTokenBalance!]! @derivedFrom(field: "token")
   block: BigInt!
-
   timestamp: BigInt!
-}
-
-# User
-type User @entity {
-  # ID
-  id: ID!
-
-  address: Bytes!
-
-  # Bar
-  bar: Bar
-
-  # fBeets (balance)
-  fBeets: BigDecimal!
-
 }

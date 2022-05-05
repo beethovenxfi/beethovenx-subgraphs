@@ -1,29 +1,29 @@
 specVersion: 0.0.3
-description: MasterChefV2
+description: MasterChef
 repository: https://github.com/beethovenxfi/beethovenx-token-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: MasterChefV2
+    name: MasterChef
     network: {{ network }}
     source:
       address: "{{ address }}"
-      abi: MasterChefV2
+      abi: MasterChef
       startBlock: {{ startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/masterchefV2.ts
+      file: ./src/mappings/masterchef.ts
       entities:
-        - MasterChefV2
+        - MasterChef
         - Pool
         - User
         - Rewarder
       abis:
-        - name: MasterChefV2
-          file: ./abis/MasterChefV2.json
+        - name: MasterChef
+          file: ./abis/MasterChef.json
         - name: SingleTokenRewarder
           file: ./abis/SingleTokenRewarder.json
         - name: MultiTokenRewarder
@@ -94,8 +94,8 @@ templates:
           file: ./abis/SingleTokenRewarder.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: MasterChefV2
-          file: ./abis/MasterChefV2.json
+        - name: MasterChef
+          file: ./abis/MasterChef.json
       eventHandlers:
         - event: LogRewardPerSecond(uint256)
           handler: logRewardPerSecond
@@ -118,8 +118,8 @@ templates:
           file: ./abis/MultiTokenRewarder.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: MasterChefV2
-          file: ./abis/MasterChefV2.json
+        - name: MasterChef
+          file: ./abis/MasterChef.json
       eventHandlers:
         - event: LogRewardsPerSecond(address[],uint256[])
           handler: logRewardsPerSecond
