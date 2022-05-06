@@ -8,6 +8,7 @@ export function getToken(address: Address): Token {
   if (token === null) {
     const erc20 = ERC20.bind(address);
     token = new Token(address);
+    token.address = address;
     token.decimals = erc20.decimals();
     token.symbol = erc20.symbol();
     token.name = erc20.name();

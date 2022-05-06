@@ -8,8 +8,13 @@ import {
   Withdraw,
 } from "../../generated/MasterChef/MasterChef";
 
-import { BigDecimal, log } from "@graphprotocol/graph-ts";
-import { BIG_DECIMAL_ZERO, BIG_INT_ONE, BIG_INT_ZERO } from "../constants";
+import { Address, BigDecimal, Bytes, log } from "@graphprotocol/graph-ts";
+import {
+  BIG_DECIMAL_1E18,
+  BIG_DECIMAL_ZERO,
+  BIG_INT_ONE,
+  BIG_INT_ZERO,
+} from "../constants";
 
 import { HarvestAction } from "../../generated/schema";
 import { getUserFarmBalance } from "../entities/user-farm-balance";
@@ -17,6 +22,8 @@ import { getToken } from "../entities/token";
 import { getRewarder } from "../entities/rewarder";
 import { getMasterChef } from "../entities/masterchef";
 import { getFarm } from "../entities/farm";
+import { BigDecimal_1e } from "../big-numbers";
+import { bytesAsAddress } from "../utils";
 
 export function logPoolAddition(event: LogPoolAddition): void {
   log.info("[MasterChef] Log Pool Addition {} {} {} {}", [
@@ -32,6 +39,7 @@ export function logPoolAddition(event: LogPoolAddition): void {
   const rewarder = getRewarder(event.params.rewarder, event.block);
 
   farm.token = farmToken.id;
+  farm.tokenAddress = farmToken.address;
   farm.rewarder = rewarder.id;
   farm.allocPoint = event.params.allocPoint;
   farm.save();
@@ -91,10 +99,10 @@ export function deposit(event: Deposit): void {
     event.params.to,
     event.block
   );
-  const token = getToken(farm.token);
+  const token = getToken(bytesAsAddress(farm.token));
 
   const amountDecimal = event.params.amount.divDecimal(
-    BigDecimal.fromString(token.decimals.toString())
+    BigDecimal_1e(token.decimals)
   );
   farm.balance = farm.balance.plus(amountDecimal);
   if (
@@ -123,10 +131,10 @@ export function withdraw(event: Withdraw): void {
     event.params.to,
     event.block
   );
-  const token = getToken(farm.token);
+  const token = getToken(bytesAsAddress(farm.token));
 
   const amountDecimal = event.params.amount.divDecimal(
-    BigDecimal.fromString(token.decimals.toString())
+    BigDecimal_1e(token.decimals)
   );
   farm.balance = farm.balance.minus(amountDecimal);
   userFarmBalance.save();
@@ -152,15 +160,13 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
     event.params.to,
     event.block
   );
-  const token = getToken(farm.token);
+  const token = getToken(bytesAsAddress(farm.token));
 
   userFarmBalance.balance = BIG_DECIMAL_ZERO;
   userFarmBalance.save();
 
   farm.balance = farm.balance.minus(
-    event.params.amount.divDecimal(
-      BigDecimal.fromString(token.decimals.toString())
-    )
+    event.params.amount.divDecimal(BigDecimal_1e(token.decimals))
   );
   farm.userCount = farm.userCount.minus(BIG_INT_ONE);
   farm.save();
@@ -174,17 +180,19 @@ export function harvest(event: Harvest): void {
   ]);
 
   const masterChef = getMasterChef(event.block);
-  const token = getToken(masterChef.emissionToken);
+  const token = getToken(bytesAsAddress(masterChef.emissionToken));
 
-  const id = event.params.user
-    .concat(token.id)
-    .concatI32(event.block.timestamp.toI32());
+  const id = event.transaction.hash
+    .concat(masterChef.id)
+    .concatI32(event.params.pid.toI32())
+    .concat(event.params.user)
+    .concat(token.id);
 
   const harvest = new HarvestAction(id);
   harvest.user = event.params.user;
   harvest.token = token.id;
   harvest.amount = event.params.amount.divDecimal(
-    BigDecimal.fromString(token.decimals.toString())
+    BigDecimal_1e(token.decimals)
   );
   harvest.block = event.block.number;
   harvest.timestamp = event.block.timestamp;

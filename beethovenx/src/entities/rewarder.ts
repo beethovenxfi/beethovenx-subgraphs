@@ -10,12 +10,14 @@ import { MultiTokenRewarder as MultiTokenRewarderContract } from "../../generate
 import { Rewarder } from "../../generated/schema";
 import { getRewardToken } from "./reward-token";
 import { getToken } from "./token";
+import { BigDecimal_1e } from "../big-numbers";
 
 export function getRewarder(address: Address, block: ethereum.Block): Rewarder {
   let rewarder = Rewarder.load(address);
 
   if (rewarder === null) {
     rewarder = new Rewarder(address);
+    rewarder.address = address;
 
     if (address != ADDRESS_ZERO) {
       const rewarderContract = SingleTokenRewarderContract.bind(address);
@@ -30,7 +32,7 @@ export function getRewarder(address: Address, block: ethereum.Block): Rewarder {
         const token = getToken(tokenAddress);
         rewardToken.rewardPerSecond = rewarderContract
           .rewardPerSecond()
-          .divDecimal(token.decimals);
+          .divDecimal(BigDecimal_1e(token.decimals));
         rewardToken.token = token.id;
         rewardToken.save();
         SingleTokenRewarderTemplate.create(address);
@@ -46,9 +48,11 @@ export function getRewarder(address: Address, block: ethereum.Block): Rewarder {
           );
 
           const token = getToken(tokenConfigs[i].rewardToken);
+          rewardToken.token = token.id;
+          rewardToken.tokenAddress = token.address;
           rewardToken.rewardPerSecond = tokenConfigs[
             i
-          ].rewardsPerSecond.divDecimal(token.decimals);
+          ].rewardsPerSecond.divDecimal(BigDecimal_1e(token.decimals));
           rewardToken.save();
         }
         MultiTokenRewarderTemplate.create(address);

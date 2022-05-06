@@ -7,6 +7,7 @@ export const ADDRESS_ZERO = Address.fromString(
 export const BIG_DECIMAL_ZERO = BigDecimal.fromString("0");
 
 export const BIG_INT_ONE = BigInt.fromI32(1);
+export const BIG_INT_TEN = BigInt.fromString("10");
 
 export const BIG_INT_ZERO = BigInt.fromI32(0);
 

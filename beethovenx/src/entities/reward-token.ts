@@ -17,6 +17,7 @@ export function getRewardToken(
     rewardToken = new RewardToken(id);
     rewardToken.rewarder = rewarderId;
     rewardToken.token = token.id;
+    rewardToken.tokenAddress = tokenAddress;
     rewardToken.rewardPerSecond = BIG_DECIMAL_ZERO;
   }
   rewardToken.block = block.number;

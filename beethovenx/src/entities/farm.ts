@@ -8,10 +8,13 @@ export function getFarm(farmId: BigInt, block: ethereum.Block): Farm {
 
   if (farm === null) {
     farm = new Farm(id);
+    farm.farmId = farmId;
     farm.masterChef = dataSource.address();
     farm.balance = BIG_DECIMAL_ZERO;
     farm.allocPoint = BIG_INT_ZERO;
     farm.userCount = BIG_INT_ZERO;
+    farm.token = ADDRESS_ZERO;
+    farm.tokenAddress = ADDRESS_ZERO;
   }
 
   farm.timestamp = block.timestamp;

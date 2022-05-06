@@ -13,12 +13,14 @@ type MasterChef @entity {
 type Farm @entity {
   # Index of pool in poolInfo on MasterChef contract
   id: Bytes!
+  farmId: BigInt!
   masterChef: MasterChef!
+  tokenAddress: Bytes!
   token: Token!
   allocPoint: BigInt!
   balance: BigDecimal!
   rewarder: Rewarder
-  users: [UserFarmBalance!]! @derivedFrom(field: "farm")
+  userBalances: [UserFarmBalance!]! @derivedFrom(field: "farm")
   userCount: BigInt!
   timestamp: BigInt!
   block: BigInt!
@@ -26,6 +28,7 @@ type Farm @entity {
 
 type RewardToken @entity {
   id: Bytes!
+  tokenAddress: Bytes!
   token: Token!
   rewarder: Rewarder
   rewardPerSecond: BigDecimal!
@@ -35,6 +38,7 @@ type RewardToken @entity {
 
 type Token @entity(immutable: true) {
   id: Bytes!
+  address: Bytes!
   name: String!
   decimals: Int!
   symbol: String!
@@ -43,6 +47,7 @@ type Token @entity(immutable: true) {
 type Rewarder @entity(immutable: true) {
   # address
   id: Bytes!
+  address: Bytes!
   rewardTokens: [RewardToken!]! @derivedFrom(field: "rewarder")
 }
 
@@ -57,7 +62,9 @@ type HarvestAction @entity(immutable: true) {
 
 type UserFarmBalance @entity {
   id: Bytes!
+  userAddress: Bytes!
   user: User!
+  farmId: BigInt!
   farm: Farm!
   balance: BigDecimal!
   timestamp: BigInt!
@@ -68,23 +75,26 @@ type User @entity(immutable: true) {
   # Pool id concatenated with user address
   id: Bytes!
   address: Bytes!
-  farms: [UserFarmBalance!]! @derivedFrom(field: "user")
-  governance: UserGovernanceTokenBalance @derivedFrom(field: "user")
+  farmBalances: [UserFarmBalance!]! @derivedFrom(field: "user")
+  governanceShareBalance: UserGovernanceShare @derivedFrom(field: "user")
   harvests: [HarvestAction!]! @derivedFrom(field: "user")
 }
 
-type UserGovernanceTokenBalance @entity {
+type UserGovernanceShare @entity {
   id: Bytes!
+  userAddress: Bytes!
   user: User!
-  token: GovernanceToken!
+  governanceShare: GovernanceShare!
   balance: BigDecimal!
   block: BigInt!
   timestamp: BigInt!
 }
 
-type GovernanceToken @entity {
+type GovernanceShare @entity {
   id: Bytes!
-  token: Token!
+  underlyingTokenAddress: Bytes!
+  underlyingToken: Token!
+  vestingTokenAddress: Bytes!
   vestingToken: Token!
   totalSupply: BigDecimal!
   ratio: BigDecimal!
@@ -92,7 +102,7 @@ type GovernanceToken @entity {
   sharesBurned: BigDecimal!
   vestingTokenBalance: BigDecimal!
   sharedVestingTokenRevenue: BigDecimal!
-  users: [UserGovernanceTokenBalance!]! @derivedFrom(field: "token")
+  userBalances: [UserGovernanceShare!]! @derivedFrom(field: "governanceShare")
   block: BigInt!
   timestamp: BigInt!
 }

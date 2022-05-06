@@ -1,4 +1,4 @@
-specVersion: 0.0.3
+specVersion: 0.0.4
 description: MasterChef
 repository: https://github.com/beethovenxfi/beethovenx-token-subgraph
 schema:
@@ -8,19 +8,23 @@ dataSources:
     name: MasterChef
     network: {{ network }}
     source:
-      address: "{{ address }}"
+      address: "{{ chef-address }}"
       abi: MasterChef
-      startBlock: {{ startBlock }}
+      startBlock: {{ chef-startBlock }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/masterchef.ts
       entities:
         - MasterChef
-        - Pool
+        - Farm
+        - UserFarmBalance
+        - HarvestAction
+        - Token
         - User
         - Rewarder
+        - RewardToken
       abis:
         - name: MasterChef
           file: ./abis/MasterChef.json
@@ -48,19 +52,21 @@ dataSources:
         - event: UpdateEmissionRate(indexed address,uint256)
           handler: updateEmissionRate
   - kind: ethereum/contract
-    name: BeetsBar
+    name: Governancetoken
     network: {{ network }}
     source:
-      address: '{{ address }}'
+      address: '{{ bar-address }}'
       abi: Bar
-      startBlock: {{ startBlock }}
+      startBlock: {{ bar-startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - Bar
+        - Token
         - User
+        - GovernanceToken
+        - UserGovernanceTokenBalance
       abis:
         - name: Bar
           file: ./abis/BeetsBar.json
@@ -75,7 +81,7 @@ dataSources:
           handler: leave
         - event: ShareRevenue(uint256)
           handler: shareRevenue
-      file: ./src/mappings/bar.ts
+      file: ./src/mappings/governance-token.ts
 templates:
   - kind: ethereum/contract
     name: SingleTokenRewarder
@@ -84,7 +90,7 @@ templates:
       abi: SingleTokenRewarder
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/single-token-rewarder.ts
       entities:
@@ -108,7 +114,7 @@ templates:
       abi: MultiTokenRewarder
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/multi-token-rewarder.ts
       entities:

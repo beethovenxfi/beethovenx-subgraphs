@@ -14,7 +14,9 @@ export function getUserFarmBalance(
   if (farmBalance === null) {
     const user = getUser(userAddress);
     farmBalance = new UserFarmBalance(id);
+    farmBalance.farmId = farmId;
     farmBalance.farm = Bytes.fromI32(farmId.toI32());
+    farmBalance.userAddress = userAddress;
     farmBalance.user = user.id;
     farmBalance.balance = BIG_DECIMAL_ZERO;
   }

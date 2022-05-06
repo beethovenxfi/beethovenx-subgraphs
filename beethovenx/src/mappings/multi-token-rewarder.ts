@@ -7,6 +7,7 @@ import {
 import { getToken } from "../entities/token";
 import { getRewardToken } from "../entities/reward-token";
 import { getRewarder } from "../entities/rewarder";
+import { BigDecimal_1e } from "../big-numbers";
 
 export function logRewardsPerSecond(event: LogRewardsPerSecond): void {
   const rewardTokens = event.params.rewardTokens;
@@ -25,7 +26,7 @@ export function logRewardsPerSecond(event: LogRewardsPerSecond): void {
     );
     const token = getToken(rewardTokens[i]);
     rewardToken.rewardPerSecond = rewardsPerSecond[i].divDecimal(
-      BigDecimal.fromString(token.decimals.toString())
+      BigDecimal_1e(token.decimals)
     );
     rewardToken.save();
   }
@@ -34,13 +35,16 @@ export function logRewardsPerSecond(event: LogRewardsPerSecond): void {
 export function logOnReward(event: LogOnReward): void {
   const token = getToken(event.params.rewardToken);
 
-  const harvest = new HarvestAction(
-    event.params.user.concat(token.id).concatI32(event.block.timestamp.toI32())
-  );
+  const id = event.transaction.hash
+    .concat(event.address)
+    .concat(event.params.user)
+    .concat(token.id);
+
+  const harvest = new HarvestAction(id);
   harvest.user = event.params.user;
   harvest.token = token.id;
   harvest.amount = event.params.amount.divDecimal(
-    BigDecimal.fromString(token.decimals.toString())
+    BigDecimal_1e(token.decimals)
   );
   harvest.block = event.block.number;
   harvest.timestamp = event.block.timestamp;

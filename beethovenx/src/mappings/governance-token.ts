@@ -13,12 +13,12 @@ import {
   Transfer as TransferEvent,
 } from "../../generated/BeetsBar/Bar";
 import { ERC20 } from "../../generated/BeetsBar/ERC20";
-import { getGovernanceToken } from "../entities/bar";
-import { getUserGovernanceTokenBalance } from "../entities/user-governance-token-balance";
+import { getGovernanceShare } from "../entities/governance-token";
+import { getUserGovernanceTokenBalance } from "../entities/user-governance-share";
 
 export function enter(event: Enter): void {
   log.warning("Enter - get bar", []);
-  const governanceToken = getGovernanceToken(event.block);
+  const governanceToken = getGovernanceShare(event.block);
   const barContract = BarContract.bind(dataSource.address());
   const userTokenBalance = getUserGovernanceTokenBalance(
     event.params.user,
@@ -50,7 +50,7 @@ export function enter(event: Enter): void {
 }
 
 export function leave(event: Leave): void {
-  const governanceToken = getGovernanceToken(event.block);
+  const governanceToken = getGovernanceShare(event.block);
   const barContract = BarContract.bind(dataSource.address());
   const userTokenBalance = getUserGovernanceTokenBalance(
     event.params.user,
@@ -84,7 +84,7 @@ export function leave(event: Leave): void {
 }
 
 export function shareRevenue(event: ShareRevenue): void {
-  const governanceToken = getGovernanceToken(event.block);
+  const governanceToken = getGovernanceShare(event.block);
 
   const sharedRevenueAmount = event.params.amount.divDecimal(BIG_DECIMAL_1E18);
 
