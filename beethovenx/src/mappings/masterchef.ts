@@ -136,7 +136,7 @@ export function withdraw(event: Withdraw): void {
   const amountDecimal = event.params.amount.divDecimal(
     BigDecimal_1e(token.decimals)
   );
-  farm.balance = farm.balance.minus(amountDecimal);
+  userFarmBalance.balance = userFarmBalance.balance.minus(amountDecimal);
   userFarmBalance.save();
 
   farm.balance = farm.balance.minus(amountDecimal);
