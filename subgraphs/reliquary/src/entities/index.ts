@@ -79,7 +79,7 @@ export function createPool(
   pool.relicCount = 0;
   pool.levelMaturities = levelInfo.requiredMaturity;
   pool.allocPoint = allocPoint;
-  if (rewarderAddress !== Address.zero()) {
+  if (rewarderAddress != Address.zero()) {
     const rewarder = getOrCreateRewarder(pid, rewarderAddress);
     pool.rewarder = rewarder.id;
   }
@@ -166,6 +166,7 @@ export function getOrCreateUser(address: Address): User {
 
   if (user === null) {
     user = new User(address);
+    user.address = address;
     user.reliquary = dataSource.address();
     user.save();
   }

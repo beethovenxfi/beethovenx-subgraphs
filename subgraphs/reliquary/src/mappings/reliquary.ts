@@ -46,7 +46,7 @@ export function logPoolAddition(event: LogPoolAddition): void {
 export function logPoolModified(event: LogPoolModified): void {
   const params = event.params;
   const pool = getPoolOrThrow(params.pid.toI32());
-  if (params.rewarder === Address.zero()) {
+  if (params.rewarder == Address.zero()) {
     pool.rewarder = null;
   } else {
     const rewarder = getOrCreateRewarder(
@@ -194,7 +194,7 @@ export function merge(event: Merge): void {
 }
 
 export function transfer(event: Transfer): void {
-  if (event.params.from === Address.zero()) {
+  if (event.params.from == Address.zero()) {
     // mint
     const relic = createRelic(event.params.to, event.params.tokenId.toI32());
     const reliquary = getOrCreateReliquary();
@@ -210,7 +210,7 @@ export function transfer(event: Transfer): void {
     );
     snapshot.relicCount = pool.relicCount;
     snapshot.save();
-  } else if (event.params.to === Address.zero()) {
+  } else if (event.params.to == Address.zero()) {
     // burn
     const relic = getRelicOrThrow(event.params.tokenId.toI32());
     const reliquary = getOrCreateReliquary();
