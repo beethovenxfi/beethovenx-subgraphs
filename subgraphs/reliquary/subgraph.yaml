@@ -1,0 +1,62 @@
+specVersion: 0.0.4
+description: Reliquary
+repository: https://github.com/beethovenxfi/beethovenx-token-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Reliquary
+    network: goerli
+    source:
+      address: "0x55df810876354Fc3e249f701Dd78DeDE57991F8D"
+      abi: Reliquary
+      startBlock: 7627474 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/reliquary.ts
+      entities:
+        - Reliquary
+        - EmissionCurve
+        - Pool
+        - DailyPoolSnapshot
+        - Relic
+        - Harvest
+        - User
+        - Rewarder
+        - Token 
+      abis:
+        - name: Reliquary
+          file: ./abis/Reliquary.json
+        - name: Rewarder
+          file: ./abis/Rewarder.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC721
+          file: './abis/ERC721.json'
+      eventHandlers:
+        - event: LogPoolAddition(indexed uint256,uint256,indexed address,indexed address,address)
+          handler: logPoolAddition
+        - event: LogPoolModified(indexed uint256,uint256,indexed address,address)
+          handler: logPoolModified
+        - event: LogSetEmissionCurve(indexed address)
+          handler: setEmissionCurve
+        - event: Deposit(indexed uint256,uint256,indexed address,indexed uint256)
+          handler: deposit
+        - event: Withdraw(indexed uint256,uint256,indexed address,indexed uint256)
+          handler: withdraw
+        - event: EmergencyWithdraw(indexed uint256,uint256,indexed address,indexed uint256)
+          handler: emergencyWithdraw
+        - event: Harvest(indexed uint256,uint256,indexed uint256)
+          handler: harvest
+        # - event: LevelChanged(indexed uint256,uint256)
+        #   handler: levelChanged
+        - event: Split(indexed uint256,indexed uint256,uint256)
+          handler: split
+        - event: Shift(indexed uint256,indexed uint256,uint256)
+          handler: shift 
+        - event: Merge(indexed uint256,indexed uint256,uint256)
+          handler: merge 
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: transfer
