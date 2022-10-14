@@ -8,7 +8,7 @@ dataSources:
     name: Reliquary
     network: goerli
     source:
-      address: "0x55df810876354Fc3e249f701Dd78DeDE57991F8D"
+      address: "0x8b9b86987e4ef90fd12d78eeb76d2bbd3ef2e987"
       abi: Reliquary
       startBlock: 7627474 
     mapping:
