@@ -217,6 +217,8 @@ export function transfer(event: Transfer): void {
     const reliquary = getOrCreateReliquary();
     reliquary.relicCount--;
     reliquary.save();
+    relic.user = getOrCreateUser(Address.zero()).address;
+    relic.save();
 
     const pool = getPoolOrThrow(relic.pid);
     pool.relicCount--;
