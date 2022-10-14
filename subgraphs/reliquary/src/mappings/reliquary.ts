@@ -138,7 +138,8 @@ export function harvest(event: Harvest): void {
     createHarvest(
       params.relicId.toI32(),
       params.amount,
-      event.block.timestamp.toI32()
+      event.block.timestamp.toI32(),
+      params.to
     );
   }
 }

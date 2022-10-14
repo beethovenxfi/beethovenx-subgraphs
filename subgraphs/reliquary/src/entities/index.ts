@@ -29,11 +29,12 @@ export function getOrCreateReliquary(): Reliquary {
 
   if (reliquary === null) {
     const reliquaryContract = ReliquaryContract.bind(address);
+    const rewardToken = getOrCreateToken(reliquaryContract.rewardToken());
     const emissionCurve = getOrCreateEmissionCurve(
       reliquaryContract.emissionCurve()
     );
     reliquary = new Reliquary(address);
-    reliquary.emissionToken = reliquaryContract.oath();
+    reliquary.emissionToken = rewardToken.id;
     reliquary.emissionCurve = emissionCurve.id;
     reliquary.totalAllocPoint = reliquaryContract.totalAllocPoint().toI32();
     reliquary.poolCount = reliquaryContract.poolLength().toI32();
@@ -190,13 +191,13 @@ export function getOrCreateToken(address: Address): Token {
 export function createHarvest(
   relicId: i32,
   amount: BigInt,
-  timestamp: i32
+  timestamp: i32,
+  to: Address
 ): Harvest {
   const reliquary = getOrCreateReliquary();
   const token = getOrCreateToken(Address.fromBytes(reliquary.emissionToken));
   const relic = getRelicOrThrow(relicId);
-  const reliquaryContract = ReliquaryContract.bind(dataSource.address());
-  const owner = reliquaryContract.ownerOf(BigInt.fromI32(relicId));
+  const user = getOrCreateUser(to);
   const harvest = new Harvest(Bytes.fromI32(relicId).concatI32(timestamp));
 
   harvest.amount = scaleDown(amount, token.decimals);
@@ -204,7 +205,7 @@ export function createHarvest(
   harvest.timestamp = timestamp;
   harvest.reliquary = reliquary.id;
   harvest.relic = relic.id;
-  harvest.user = owner;
+  harvest.user = user.id;
   harvest.save();
   return harvest;
 }
