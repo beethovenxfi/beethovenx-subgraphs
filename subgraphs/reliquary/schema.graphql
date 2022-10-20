@@ -14,7 +14,7 @@ type Reliquary @entity {
 type EmissionCurve @entity {
   id: Bytes!
   address: Bytes!
-  # not sure
+  rewardPerSecond: BigDecimal!
 }
 
 type Pool @entity {

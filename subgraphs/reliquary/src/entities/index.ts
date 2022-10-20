@@ -18,6 +18,8 @@ import {
 } from "../../generated/schema";
 import { Reliquary as ReliquaryContract } from "../../generated/Reliquary/Reliquary";
 import { Rewarder as RewarderContract } from "../../generated/Reliquary/Rewarder";
+import { BeetsConstantEmissionCurve } from "../../generated/templates/EmissionCurve/BeetsConstantEmissionCurve";
+import { EmissionCurve as EmissionCurveTemplate } from "../../generated/templates";
 import { ERC20 } from "../../generated/Reliquary/ERC20";
 import { scaleDown } from "../utils/numbers";
 
@@ -48,9 +50,17 @@ export function getOrCreateEmissionCurve(address: Address): EmissionCurve {
   let emissionCurve = EmissionCurve.load(address);
 
   if (emissionCurve === null) {
+    const emissionCurveContract = BeetsConstantEmissionCurve.bind(address);
+    let rewardPerSecond = BigDecimal.zero();
+    const rewardPerSecondResult = emissionCurveContract.try_rewardPerSecond();
+    if (!rewardPerSecondResult.reverted) {
+      rewardPerSecond = scaleDown(rewardPerSecondResult.value, 18);
+    }
     emissionCurve = new EmissionCurve(address);
     emissionCurve.address = address;
+    emissionCurve.rewardPerSecond = rewardPerSecond;
     emissionCurve.save();
+    EmissionCurveTemplate.create(address);
   }
 
   return emissionCurve;

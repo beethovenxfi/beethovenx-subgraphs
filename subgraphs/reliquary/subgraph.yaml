@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Reliquary
-    network: goerli
+    network: fantom 
     source:
-      address: "0x8b9b86987e4ef90fd12d78eeb76d2bbd3ef2e987"
+      address: "0x300DaA195a19DC39719237655eCadA053031359d"
       abi: Reliquary
-      startBlock: 7627474 
+      startBlock: 49529312 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -29,6 +29,8 @@ dataSources:
       abis:
         - name: Reliquary
           file: ./abis/Reliquary.json
+        - name: BeetsConstantEmissionCurve
+          file: './abis/BeetsConstantEmissionCurve.json'
         - name: Rewarder
           file: ./abis/Rewarder.json
         - name: ERC20
@@ -50,8 +52,6 @@ dataSources:
           handler: emergencyWithdraw
         - event: Harvest(indexed uint256,uint256,indexed address,indexed uint256)
           handler: harvest
-        # - event: LevelChanged(indexed uint256,uint256)
-        #   handler: levelChanged
         - event: Split(indexed uint256,indexed uint256,uint256)
           handler: split
         - event: Shift(indexed uint256,indexed uint256,uint256)
@@ -60,3 +60,28 @@ dataSources:
           handler: merge 
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: transfer
+templates:
+  - kind: ethereum/contract
+    name: EmissionCurve 
+    network: fantom 
+    source:
+      abi: BeetsConstantEmissionCurve 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/reliquary.ts
+      entities:
+        - Reliquary
+      abis:
+        - name: Reliquary
+          file: ./abis/Reliquary.json
+        - name: BeetsConstantEmissionCurve
+          file: './abis/BeetsConstantEmissionCurve.json'
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC721
+          file: './abis/ERC721.json'
+      eventHandlers:
+        - event: EmissionUpdate(uint256)
+          handler: emissionUpdate
