@@ -118,6 +118,8 @@ export function getOrCreateRewarder(
     const rewardToken = getOrCreateToken(contract.rewardToken());
     rewarder = new Rewarder(rewarderId);
     rewarder.rewardToken = rewardToken.id;
+    //todo: set correct emissions from contract
+    rewarder.rewardPerSecond = BigDecimal.zero();
     rewarder.save();
   }
   return rewarder;

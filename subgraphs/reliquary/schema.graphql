@@ -75,6 +75,7 @@ type User @entity(immutable: true) {
 type Rewarder @entity(immutable: true) {
   id: Bytes!
   rewardToken: Token!
+  rewardPerSecond: BigDecimal!
 }
 
 type Token @entity(immutable: true) {
