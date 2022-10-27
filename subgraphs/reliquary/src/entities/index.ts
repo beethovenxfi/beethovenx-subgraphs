@@ -156,6 +156,7 @@ export function createRelic(userAddress: Address, relicId: i32): Relic {
   relic.reliquary = dataSource.address();
   relic.pool = pool.id;
   relic.pid = pool.pid;
+  relic.userAddress = userAddress;
   relic.user = user.id;
   relic.balance = BigDecimal.zero();
   relic.entryTimestamp = positionInfo.entry.toI32();

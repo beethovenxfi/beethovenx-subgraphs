@@ -48,6 +48,7 @@ type Relic @entity {
   reliquary: Reliquary!
   pool: Pool!
   pid: Int!
+  userAddress: Bytes!
   user: User!
   balance: BigDecimal!
   entryTimestamp: Int!
