@@ -10,9 +10,11 @@ import {
   EmissionCurve,
   Harvest,
   Pool,
+  PoolLevel,
   Relic,
   Reliquary,
   Rewarder,
+  RewarderEmission,
   Token,
   User,
 } from "../../generated/schema";
@@ -76,6 +78,8 @@ export function createPool(
   const contract = ReliquaryContract.bind(dataSource.address());
   const poolInfo = contract.getPoolInfo(BigInt.fromI32(pid));
   const levelInfo = contract.getLevelInfo(BigInt.fromI32(pid));
+  const allocPoints = levelInfo.allocPoint;
+  const requiredMaturities = levelInfo.requiredMaturity;
 
   const poolToken = getOrCreateToken(poolTokenAddress);
 
@@ -88,13 +92,23 @@ export function createPool(
   pool.poolTokenAddress = poolTokenAddress;
   pool.totalBalance = BigDecimal.zero();
   pool.relicCount = 0;
-  pool.levelMaturities = levelInfo.requiredMaturity;
   pool.allocPoint = allocPoint;
   if (rewarderAddress != Address.zero()) {
     const rewarder = getOrCreateRewarder(pid, rewarderAddress);
     pool.rewarder = rewarder.id;
   }
   pool.save();
+
+  for (let index: i32 = 0; index < allocPoints.length; index++) {
+    const poolLevel = new PoolLevel(Bytes.fromI32(pid).concatI32(index));
+    poolLevel.pool = pool.id;
+    poolLevel.level = index;
+    poolLevel.balance = BigDecimal.zero();
+    poolLevel.allocationPoints = allocPoints[index].toI32();
+    poolLevel.requiredMaturity = requiredMaturities[index].toI32();
+    poolLevel.save();
+  }
+
   return pool;
 }
 
@@ -116,11 +130,15 @@ export function getOrCreateRewarder(
   if (rewarder === null) {
     const contract = RewarderContract.bind(rewarderAddress);
     const rewardToken = getOrCreateToken(contract.rewardToken());
+    // TODO: set correct emissions from contract
     rewarder = new Rewarder(rewarderId);
-    rewarder.rewardToken = rewardToken.id;
-    //todo: set correct emissions from contract
-    rewarder.rewardPerSecond = BigDecimal.zero();
     rewarder.save();
+    const emission = new RewarderEmission(rewarderId.concat(rewardToken.id));
+    emission.rewardToken = rewardToken.id;
+    emission.rewardTokenAddress = rewardToken.address;
+    emission.rewardPerSecond = BigDecimal.zero();
+    emission.rewarder = rewarder.id;
+    emission.save();
   }
   return rewarder;
 }
@@ -153,6 +171,7 @@ export function createRelic(userAddress: Address, relicId: i32): Relic {
   const pool = getPoolOrThrow(positionInfo.poolId.toI32());
   const user = getOrCreateUser(userAddress);
 
+  const poolLevel = getPoolLevelOrThrow(pool.pid, 0);
   const relic = new Relic(Bytes.fromI32(relicId));
   relic.relicId = relicId;
   relic.reliquary = dataSource.address();
@@ -161,10 +180,23 @@ export function createRelic(userAddress: Address, relicId: i32): Relic {
   relic.userAddress = userAddress;
   relic.user = user.id;
   relic.balance = BigDecimal.zero();
+  relic.level = 0;
+  relic.poolLevel = poolLevel.id;
   relic.entryTimestamp = positionInfo.entry.toI32();
   relic.save();
 
   return relic;
+}
+
+export function getPoolLevelOrThrow(poolId: i32, level: i32): PoolLevel {
+  const id = Bytes.fromI32(poolId).concatI32(level);
+  let poolLevel = PoolLevel.load(id);
+  if (poolLevel === null) {
+    throw new Error(
+      `Pool level for pool ${poolId} and level ${level} not found`
+    );
+  }
+  return poolLevel;
 }
 
 export function getRelicOrThrow(relicId: i32): Relic {

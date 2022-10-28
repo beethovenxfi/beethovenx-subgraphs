@@ -52,6 +52,8 @@ dataSources:
           handler: emergencyWithdraw
         - event: Harvest(indexed uint256,uint256,indexed address,indexed uint256)
           handler: harvest
+        - event: LevelChanged(indexed uint256,uint256)
+          handler: levelChanged
         - event: Split(indexed uint256,indexed uint256,uint256)
           handler: split
         - event: Shift(indexed uint256,indexed uint256,uint256)

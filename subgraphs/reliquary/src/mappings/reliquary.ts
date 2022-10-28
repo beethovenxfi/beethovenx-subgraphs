@@ -2,9 +2,13 @@ import {
   Address,
   BigDecimal,
   BigInt,
+  Bytes,
   dataSource,
 } from "@graphprotocol/graph-ts";
-import { Reliquary as ReliquaryContract } from "../../generated/Reliquary/Reliquary";
+import {
+  LevelChanged,
+  Reliquary as ReliquaryContract,
+} from "../../generated/Reliquary/Reliquary";
 import { Transfer } from "../../generated/Reliquary/ERC721";
 import {
   Deposit,
@@ -27,6 +31,7 @@ import {
   getOrCreateReliquary,
   getOrCreateRewarder,
   getOrCreateUser,
+  getPoolLevelOrThrow,
   getPoolOrThrow,
   getRelicOrThrow,
 } from "../entities";
@@ -90,6 +95,10 @@ export function deposit(event: Deposit): void {
   relic.balance = relic.balance.plus(scaledAmount);
   relic.save();
 
+  const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
+  poolLevel.balance = poolLevel.balance.plus(scaledAmount);
+  poolLevel.save();
+
   snapshot.totalDeposited = snapshot.totalDeposited.plus(scaledAmount);
   snapshot.save();
 }
@@ -110,8 +119,30 @@ export function withdraw(event: Withdraw): void {
   relic.balance = relic.balance.minus(scaledAmount);
   relic.save();
 
+  const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
+  poolLevel.balance = poolLevel.balance.plus(scaledAmount);
+  poolLevel.save();
+
   snapshot.totalDeposited = snapshot.totalDeposited.minus(scaledAmount);
   snapshot.save();
+}
+
+export function levelChanged(event: LevelChanged): void {
+  const params = event.params;
+
+  const relic = getRelicOrThrow(params.relicId.toI32());
+  const previousBalance = getPoolLevelOrThrow(relic.pid, relic.level);
+
+  previousBalance.balance = previousBalance.balance.minus(relic.balance);
+  previousBalance.save();
+
+  const nextBalance = getPoolLevelOrThrow(relic.pid, params.newLevel.toI32());
+  nextBalance.balance = nextBalance.balance.plus(relic.balance);
+  nextBalance.save();
+
+  relic.poolLevel = nextBalance.id;
+  relic.level = params.newLevel.toI32();
+  relic.save();
 }
 
 export function emergencyWithdraw(event: EmergencyWithdraw): void {
@@ -128,6 +159,10 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
   pool.save();
   relic.balance = BigDecimal.zero();
   relic.save();
+
+  const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
+  poolLevel.balance = poolLevel.balance.plus(scaledAmount);
+  poolLevel.save();
 
   snapshot.totalDeposited = snapshot.totalDeposited.minus(scaledAmount);
   snapshot.save();
@@ -156,6 +191,8 @@ export function split(event: Split): void {
   relicFrom.save();
   relicTo.balance = scaledAmount;
   relicTo.entryTimestamp = relicFrom.entryTimestamp;
+  relicTo.level = relicFrom.level;
+  relicTo.poolLevel = relicFrom.poolLevel;
   relicTo.save();
 }
 
@@ -172,9 +209,18 @@ export function shift(event: Shift): void {
 
   relicFrom.balance = relicFrom.balance.minus(scaledAmount);
   relicFrom.save();
+
+  const fromLevelBalance = getPoolLevelOrThrow(relicFrom.pid, relicFrom.level);
+  fromLevelBalance.balance = fromLevelBalance.balance.minus(scaledAmount);
+  fromLevelBalance.save();
+
   relicTo.balance = relicTo.balance.plus(scaledAmount);
   relicTo.entryTimestamp = positionInfoRelicTo.entry.toI32();
   relicTo.save();
+
+  const toLevelBalance = getPoolLevelOrThrow(relicTo.pid, relicTo.level);
+  toLevelBalance.balance = toLevelBalance.balance.plus(scaledAmount);
+  toLevelBalance.save();
 }
 
 export function merge(event: Merge): void {
@@ -190,9 +236,18 @@ export function merge(event: Merge): void {
 
   relicFrom.balance = BigDecimal.zero();
   relicFrom.save();
+
+  const fromLevelBalance = getPoolLevelOrThrow(relicFrom.pid, relicFrom.level);
+  fromLevelBalance.balance = fromLevelBalance.balance.minus(scaledAmount);
+  fromLevelBalance.save();
+
   relicTo.balance = relicTo.balance.plus(scaledAmount);
   relicTo.entryTimestamp = positionInfoRelicTo.entry.toI32();
   relicTo.save();
+
+  const toLevelBalance = getPoolLevelOrThrow(relicTo.pid, relicTo.level);
+  toLevelBalance.balance = toLevelBalance.balance.plus(scaledAmount);
+  toLevelBalance.save();
 }
 
 export function transfer(event: Transfer): void {

@@ -29,8 +29,18 @@ type Pool @entity {
   totalBalance: BigDecimal!
   relics: [Relic!]! @derivedFrom(field: "pool")
   relicCount: Int!
-  levelMaturities: [BigInt!]!
+  levels: [PoolLevel!]! @derivedFrom(field: "pool")
   allocPoint: Int!
+}
+
+type PoolLevel @entity {
+  id: Bytes!
+  pool: Pool!
+  level: Int!
+  balance: BigDecimal!
+  requiredMaturity: Int!
+  allocationPoints: Int!
+  relics: [Relic!]! @derivedFrom(field: "poolLevel")
 }
 
 type DailyPoolSnapshot @entity {
@@ -51,6 +61,8 @@ type Relic @entity {
   userAddress: Bytes!
   user: User!
   balance: BigDecimal!
+  level: Int!
+  poolLevel: PoolLevel!
   entryTimestamp: Int!
   harvests: [Harvest!]! @derivedFrom(field: "relic")
 }
@@ -74,7 +86,14 @@ type User @entity(immutable: true) {
 
 type Rewarder @entity(immutable: true) {
   id: Bytes!
+  emissions: [RewarderEmission!]! @derivedFrom(field: "rewarder")
+}
+
+type RewarderEmission @entity {
+  id: Bytes!
+  rewarder: Rewarder!
   rewardToken: Token!
+  rewardTokenAddress: Bytes!
   rewardPerSecond: BigDecimal!
 }
 
