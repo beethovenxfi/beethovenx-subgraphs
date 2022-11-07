@@ -8,9 +8,9 @@ dataSources:
     name: Reliquary
     network: fantom 
     source:
-      address: "0x300DaA195a19DC39719237655eCadA053031359d"
+      address: "0xb0FC43069089d0fA02baAa896ac2eFcb596D7D05"
       abi: Reliquary
-      startBlock: 49529312 
+      startBlock: 50564577
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
