@@ -81,12 +81,13 @@ export function createPool(
   const allocPoints = levelInfo.allocPoint;
   const requiredMaturities = levelInfo.requiredMaturity;
 
+  const reliquary = getOrCreateReliquary();
   const poolToken = getOrCreateToken(poolTokenAddress);
 
   const pool = new Pool(Bytes.fromI32(pid));
   pool.pid = pid;
   pool.name = poolInfo.name;
-  pool.reliquary = dataSource.address();
+  pool.reliquary = reliquary.id;
   pool.nftDescriptor = nftDescriptor;
   pool.poolToken = poolToken.id;
   pool.poolTokenAddress = poolTokenAddress;

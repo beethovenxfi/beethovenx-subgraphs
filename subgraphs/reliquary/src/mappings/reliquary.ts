@@ -4,6 +4,7 @@ import {
   BigInt,
   Bytes,
   dataSource,
+  log,
 } from "@graphprotocol/graph-ts";
 import {
   LevelChanged,
@@ -37,6 +38,7 @@ import {
 } from "../entities";
 import { scaleDown } from "../utils/numbers";
 import { EmissionUpdate } from "../../generated/EmissionCurve/BeetsConstantEmissionCurve";
+import { Relic } from "../../generated/schema";
 
 export function logPoolAddition(event: LogPoolAddition): void {
   const params = event.params;
@@ -130,7 +132,11 @@ export function withdraw(event: Withdraw): void {
 export function levelChanged(event: LevelChanged): void {
   const params = event.params;
 
-  const relic = getRelicOrThrow(params.relicId.toI32());
+  const relic = Relic.load(Bytes.fromI32(params.relicId.toI32()));
+  if (relic === null) {
+    log.warning(`Relic with id %s not found`, [params.relicId.toString()]);
+    return;
+  }
   const previousBalance = getPoolLevelOrThrow(relic.pid, relic.level);
 
   previousBalance.balance = previousBalance.balance.minus(relic.balance);
