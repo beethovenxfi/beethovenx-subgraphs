@@ -1,0 +1,106 @@
+type Reliquary @entity {
+  id: Bytes!
+  emissionToken: Token!
+  totalAllocPoint: Int!
+  poolCount: Int!
+  relicCount: Int!
+  emissionCurve: EmissionCurve!
+  pools: [Pool!] @derivedFrom(field: "reliquary")
+  users: [User!] @derivedFrom(field: "reliquary")
+  relics: [Relic!]! @derivedFrom(field: "reliquary")
+  harvests: [Harvest!]! @derivedFrom(field: "reliquary")
+}
+
+type EmissionCurve @entity {
+  id: Bytes!
+  address: Bytes!
+  rewardPerSecond: BigDecimal!
+}
+
+type Pool @entity {
+  id: Bytes!
+  pid: Int!
+  name: String!
+  reliquary: Reliquary!
+  rewarder: Rewarder
+  nftDescriptor: Bytes!
+  poolTokenAddress: Bytes!
+  poolToken: Token!
+  totalBalance: BigDecimal!
+  relics: [Relic!]! @derivedFrom(field: "pool")
+  relicCount: Int!
+  levels: [PoolLevel!]! @derivedFrom(field: "pool")
+  allocPoint: Int!
+}
+
+type PoolLevel @entity {
+  id: Bytes!
+  pool: Pool!
+  level: Int!
+  balance: BigDecimal!
+  requiredMaturity: Int!
+  allocationPoints: Int!
+  relics: [Relic!]! @derivedFrom(field: "poolLevel")
+}
+
+type DailyPoolSnapshot @entity {
+  id: Bytes!
+  timestamp: Int!
+  totalBalance: BigDecimal!
+  totalDeposited: BigDecimal!
+  totalWithdrawn: BigDecimal!
+  relicCount: Int!
+}
+
+type Relic @entity {
+  id: Bytes!
+  relicId: Int!
+  reliquary: Reliquary!
+  pool: Pool!
+  pid: Int!
+  userAddress: Bytes!
+  user: User!
+  balance: BigDecimal!
+  level: Int!
+  poolLevel: PoolLevel!
+  entryTimestamp: Int!
+  harvests: [Harvest!]! @derivedFrom(field: "relic")
+}
+
+type Harvest @entity(immutable: true) {
+  id: Bytes!
+  amount: BigDecimal!
+  token: Token!
+  timestamp: Int!
+  reliquary: Reliquary!
+  relic: Relic!
+  user: User!
+}
+
+type User @entity(immutable: true) {
+  id: Bytes!
+  reliquary: Reliquary!
+  address: Bytes!
+  relics: [Relic!]! @derivedFrom(field: "user")
+}
+
+type Rewarder @entity(immutable: true) {
+  id: Bytes!
+  emissions: [RewarderEmission!]! @derivedFrom(field: "rewarder")
+}
+
+type RewarderEmission @entity {
+  id: Bytes!
+  rewarder: Rewarder!
+  rewardToken: Token!
+  rewardTokenAddress: Bytes!
+  rewardPerSecond: BigDecimal!
+}
+
+type Token @entity(immutable: true) {
+  id: Bytes!
+  address: Bytes!
+  name: String!
+  symbol: String!
+  decimals: Int!
+}
