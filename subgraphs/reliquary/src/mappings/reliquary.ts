@@ -28,6 +28,7 @@ import {
   createPool,
   createRelic,
   getOrCreateDailyPoolSnapshot,
+  getOrCreateDailyRelicSnapshot,
   getOrCreateEmissionCurve,
   getOrCreateReliquary,
   getOrCreateRewarder,
@@ -83,26 +84,40 @@ export function deposit(event: Deposit): void {
 
   const pool = getPoolOrThrow(params.pid.toI32());
   const relic = getRelicOrThrow(params.relicId.toI32());
-  const snapshot = getOrCreateDailyPoolSnapshot(
+  const dailyPoolSnapshot = getOrCreateDailyPoolSnapshot(
     relic.pid,
     event.block.timestamp.toI32()
   );
+
+  const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
+    relic.id,
+    relic.userAddress,
+    event.block.timestamp.toI32()
+  );
+
   const scaledAmount = scaleDown(params.amount, 18);
 
   pool.totalBalance = pool.totalBalance.plus(scaledAmount);
   pool.save();
+
   const reliquaryContract = ReliquaryContract.bind(dataSource.address());
   const positionInfo = reliquaryContract.getPositionForId(params.relicId);
+
   relic.entryTimestamp = positionInfo.entry.toI32();
   relic.balance = relic.balance.plus(scaledAmount);
   relic.save();
+
+  dailyRelicSnapshot.balance = relic.balance;
+  dailyRelicSnapshot.entryTimestamp = relic.entryTimestamp;
+  dailyRelicSnapshot.save();
 
   const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
   poolLevel.balance = poolLevel.balance.plus(scaledAmount);
   poolLevel.save();
 
-  snapshot.totalDeposited = snapshot.totalDeposited.plus(scaledAmount);
-  snapshot.save();
+  dailyPoolSnapshot.totalDeposited =
+    dailyPoolSnapshot.totalDeposited.plus(scaledAmount);
+  dailyPoolSnapshot.save();
 }
 
 export function withdraw(event: Withdraw): void {
@@ -110,23 +125,34 @@ export function withdraw(event: Withdraw): void {
 
   const pool = getPoolOrThrow(params.pid.toI32());
   const relic = getRelicOrThrow(params.relicId.toI32());
-  const snapshot = getOrCreateDailyPoolSnapshot(
+  const dailyPoolSnapshot = getOrCreateDailyPoolSnapshot(
     relic.pid,
     event.block.timestamp.toI32()
   );
+  const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
+    relic.id,
+    relic.userAddress,
+    event.block.timestamp.toI32()
+  );
+
   const scaledAmount = scaleDown(params.amount, 18);
 
   pool.totalBalance = pool.totalBalance.minus(scaledAmount);
   pool.save();
+
   relic.balance = relic.balance.minus(scaledAmount);
   relic.save();
+
+  dailyRelicSnapshot.balance = relic.balance;
+  dailyRelicSnapshot.save();
 
   const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
   poolLevel.balance = poolLevel.balance.plus(scaledAmount);
   poolLevel.save();
 
-  snapshot.totalDeposited = snapshot.totalDeposited.minus(scaledAmount);
-  snapshot.save();
+  dailyPoolSnapshot.totalDeposited =
+    dailyPoolSnapshot.totalDeposited.minus(scaledAmount);
+  dailyPoolSnapshot.save();
 }
 
 export function levelChanged(event: LevelChanged): void {
@@ -137,6 +163,12 @@ export function levelChanged(event: LevelChanged): void {
     log.warning(`Relic with id %s not found`, [params.relicId.toString()]);
     return;
   }
+  const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
+    relic.id,
+    relic.userAddress,
+    event.block.timestamp.toI32()
+  );
+
   const previousBalance = getPoolLevelOrThrow(relic.pid, relic.level);
 
   previousBalance.balance = previousBalance.balance.minus(relic.balance);
@@ -149,6 +181,9 @@ export function levelChanged(event: LevelChanged): void {
   relic.poolLevel = nextBalance.id;
   relic.level = params.newLevel.toI32();
   relic.save();
+
+  dailyRelicSnapshot.level = relic.level;
+  dailyRelicSnapshot.save();
 }
 
 export function emergencyWithdraw(event: EmergencyWithdraw): void {
@@ -156,8 +191,13 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
 
   const pool = getPoolOrThrow(params.pid.toI32());
   const relic = getRelicOrThrow(params.relicId.toI32());
-  const snapshot = getOrCreateDailyPoolSnapshot(
+  const dailyPoolSnapshot = getOrCreateDailyPoolSnapshot(
     relic.pid,
+    event.block.timestamp.toI32()
+  );
+  const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
+    relic.id,
+    relic.userAddress,
     event.block.timestamp.toI32()
   );
   const scaledAmount = scaleDown(params.amount, 18);
@@ -166,12 +206,16 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
   relic.balance = BigDecimal.zero();
   relic.save();
 
+  dailyRelicSnapshot.balance = relic.balance;
+  dailyRelicSnapshot.save();
+
   const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
   poolLevel.balance = poolLevel.balance.plus(scaledAmount);
   poolLevel.save();
 
-  snapshot.totalDeposited = snapshot.totalDeposited.minus(scaledAmount);
-  snapshot.save();
+  dailyPoolSnapshot.totalDeposited =
+    dailyPoolSnapshot.totalDeposited.minus(scaledAmount);
+  dailyPoolSnapshot.save();
 }
 
 export function harvest(event: Harvest): void {
@@ -189,24 +233,53 @@ export function harvest(event: Harvest): void {
 export function split(event: Split): void {
   const params = event.params;
   const relicFrom = getRelicOrThrow(params.fromId.toI32());
+  const dailyRelicFromSnapshot = getOrCreateDailyRelicSnapshot(
+    relicFrom.id,
+    relicFrom.userAddress,
+    event.block.timestamp.toI32()
+  );
   const relicTo = getRelicOrThrow(params.toId.toI32());
+  const dailyRelicToSnapshot = getOrCreateDailyRelicSnapshot(
+    relicTo.id,
+    relicTo.userAddress,
+    event.block.timestamp.toI32()
+  );
 
   const scaledAmount = scaleDown(params.amount, 18);
 
   relicFrom.balance = relicFrom.balance.minus(scaledAmount);
   relicFrom.save();
+
+  dailyRelicFromSnapshot.balance = relicFrom.balance;
+  dailyRelicFromSnapshot.save();
+
   relicTo.balance = scaledAmount;
   relicTo.entryTimestamp = relicFrom.entryTimestamp;
   relicTo.level = relicFrom.level;
   relicTo.poolLevel = relicFrom.poolLevel;
   relicTo.save();
+
+  dailyRelicToSnapshot.balance = relicTo.balance;
+  dailyRelicToSnapshot.entryTimestamp = relicTo.entryTimestamp;
+  dailyRelicToSnapshot.level = relicTo.level;
+  dailyRelicFromSnapshot.save();
 }
 
 export function shift(event: Shift): void {
   const params = event.params;
 
   const relicFrom = getRelicOrThrow(params.fromId.toI32());
+  const dailyRelicFromSnapshot = getOrCreateDailyRelicSnapshot(
+    relicFrom.id,
+    relicFrom.userAddress,
+    event.block.timestamp.toI32()
+  );
   const relicTo = getRelicOrThrow(params.toId.toI32());
+  const dailyRelicToSnapshot = getOrCreateDailyRelicSnapshot(
+    relicTo.id,
+    relicTo.userAddress,
+    event.block.timestamp.toI32()
+  );
 
   const scaledAmount = scaleDown(params.amount, 18);
 
@@ -216,6 +289,9 @@ export function shift(event: Shift): void {
   relicFrom.balance = relicFrom.balance.minus(scaledAmount);
   relicFrom.save();
 
+  dailyRelicFromSnapshot.balance = relicFrom.balance;
+  dailyRelicFromSnapshot.save();
+
   const fromLevelBalance = getPoolLevelOrThrow(relicFrom.pid, relicFrom.level);
   fromLevelBalance.balance = fromLevelBalance.balance.minus(scaledAmount);
   fromLevelBalance.save();
@@ -223,6 +299,10 @@ export function shift(event: Shift): void {
   relicTo.balance = relicTo.balance.plus(scaledAmount);
   relicTo.entryTimestamp = positionInfoRelicTo.entry.toI32();
   relicTo.save();
+
+  dailyRelicToSnapshot.balance = relicTo.balance;
+  dailyRelicToSnapshot.entryTimestamp = relicTo.entryTimestamp;
+  dailyRelicToSnapshot.save();
 
   const toLevelBalance = getPoolLevelOrThrow(relicTo.pid, relicTo.level);
   toLevelBalance.balance = toLevelBalance.balance.plus(scaledAmount);
@@ -233,7 +313,17 @@ export function merge(event: Merge): void {
   const params = event.params;
 
   const relicFrom = getRelicOrThrow(params.fromId.toI32());
+  const dailyRelicFromSnapshot = getOrCreateDailyRelicSnapshot(
+    relicFrom.id,
+    relicFrom.userAddress,
+    event.block.timestamp.toI32()
+  );
   const relicTo = getRelicOrThrow(params.toId.toI32());
+  const dailyRelicToSnapshot = getOrCreateDailyRelicSnapshot(
+    relicTo.id,
+    relicTo.userAddress,
+    event.block.timestamp.toI32()
+  );
 
   const scaledAmount = scaleDown(params.amount, 18);
 
@@ -243,6 +333,9 @@ export function merge(event: Merge): void {
   relicFrom.balance = BigDecimal.zero();
   relicFrom.save();
 
+  dailyRelicFromSnapshot.balance = relicFrom.balance;
+  dailyRelicFromSnapshot.save();
+
   const fromLevelBalance = getPoolLevelOrThrow(relicFrom.pid, relicFrom.level);
   fromLevelBalance.balance = fromLevelBalance.balance.minus(scaledAmount);
   fromLevelBalance.save();
@@ -250,6 +343,10 @@ export function merge(event: Merge): void {
   relicTo.balance = relicTo.balance.plus(scaledAmount);
   relicTo.entryTimestamp = positionInfoRelicTo.entry.toI32();
   relicTo.save();
+
+  dailyRelicToSnapshot.balance = relicTo.balance;
+  dailyRelicToSnapshot.entryTimestamp = relicTo.entryTimestamp;
+  dailyRelicToSnapshot.save();
 
   const toLevelBalance = getPoolLevelOrThrow(relicTo.pid, relicTo.level);
   toLevelBalance.balance = toLevelBalance.balance.plus(scaledAmount);
@@ -267,12 +364,12 @@ export function transfer(event: Transfer): void {
     const pool = getPoolOrThrow(relic.pid);
     pool.relicCount++;
     pool.save();
-    const snapshot = getOrCreateDailyPoolSnapshot(
+    const dailyPoolSnapshot = getOrCreateDailyPoolSnapshot(
       relic.pid,
       event.block.timestamp.toI32()
     );
-    snapshot.relicCount = pool.relicCount;
-    snapshot.save();
+    dailyPoolSnapshot.relicCount = pool.relicCount;
+    dailyPoolSnapshot.save();
   } else if (event.params.to == Address.zero()) {
     // burn
     const relic = getRelicOrThrow(event.params.tokenId.toI32());
@@ -294,9 +391,18 @@ export function transfer(event: Transfer): void {
   } else {
     // account transfer
     const relic = getRelicOrThrow(event.params.tokenId.toI32());
+    const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
+      relic.id,
+      relic.userAddress,
+      event.block.timestamp.toI32()
+    );
     const userTo = getOrCreateUser(Address.fromBytes(relic.user));
     relic.user = userTo.id;
     relic.save();
+
+    dailyRelicSnapshot.user = userTo.id;
+    dailyRelicSnapshot.userAddress = userTo.address;
+    dailyRelicSnapshot.save();
   }
 }
 

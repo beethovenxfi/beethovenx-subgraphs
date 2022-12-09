@@ -7,6 +7,7 @@ import {
 } from "@graphprotocol/graph-ts";
 import {
   DailyPoolSnapshot,
+  DailyRelicSnapshot,
   EmissionCurve,
   Harvest,
   Pool,
@@ -153,12 +154,15 @@ export function getOrCreateDailyPoolSnapshot(
   let snapshot = DailyPoolSnapshot.load(snpashotId);
 
   if (snapshot === null) {
+    const pool = getPoolOrThrow(pid);
     snapshot = new DailyPoolSnapshot(snpashotId);
-    snapshot.timestamp = timestampStartOfDay;
+    snapshot.snapshotTimestamp = timestampStartOfDay;
     snapshot.totalBalance = BigDecimal.zero();
     snapshot.totalDeposited = BigDecimal.zero();
     snapshot.totalWithdrawn = BigDecimal.zero();
     snapshot.relicCount = 0;
+    snapshot.poolId = pid;
+    snapshot.pool = pool.id;
     snapshot.save();
   }
   return snapshot;
@@ -254,4 +258,33 @@ export function createHarvest(
   harvest.user = user.id;
   harvest.save();
   return harvest;
+}
+
+export function getOrCreateDailyRelicSnapshot(
+  relicId: Bytes,
+  userAddress: Bytes,
+  timestamp: i32
+): DailyRelicSnapshot {
+  let timestampStartOfDay = timestamp - (timestamp % DAY);
+  const snpashotId = relicId.concatI32(timestampStartOfDay);
+  let snapshot = DailyRelicSnapshot.load(snpashotId);
+
+  if (snapshot === null) {
+    const user = getOrCreateUser(Address.fromBytes(userAddress));
+    const relic = getRelicOrThrow(relicId.toI32());
+    snapshot = new DailyRelicSnapshot(snpashotId);
+    snapshot.snapshotTimestamp = timestampStartOfDay;
+    snapshot.balance = BigDecimal.zero();
+    snapshot.user = user.id;
+    snapshot.userAddress = user.address;
+    snapshot.relic = relic.id;
+    snapshot.relicId = relic.relicId;
+    snapshot.poolId = relic.pid;
+    snapshot.pool = relic.pool;
+    snapshot.entryTimestamp = relic.entryTimestamp;
+    snapshot.level = relic.level;
+
+    snapshot.save();
+  }
+  return snapshot;
 }
