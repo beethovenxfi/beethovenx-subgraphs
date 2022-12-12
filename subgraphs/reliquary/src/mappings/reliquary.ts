@@ -38,7 +38,7 @@ import {
   getRelicOrThrow,
 } from "../entities";
 import { scaleDown } from "../utils/numbers";
-import { EmissionUpdate } from "../../generated/EmissionCurve/BeetsConstantEmissionCurve";
+import { EmissionUpdate } from "../../generated/Reliquary/BeetsConstantEmissionCurve";
 import { Relic } from "../../generated/schema";
 
 export function logPoolAddition(event: LogPoolAddition): void {
@@ -115,8 +115,10 @@ export function deposit(event: Deposit): void {
   poolLevel.balance = poolLevel.balance.plus(scaledAmount);
   poolLevel.save();
 
-  dailyPoolSnapshot.totalDeposited =
-    dailyPoolSnapshot.totalDeposited.plus(scaledAmount);
+  dailyPoolSnapshot.totalBalance = pool.totalBalance;
+
+  dailyPoolSnapshot.dailyDeposited =
+    dailyPoolSnapshot.dailyDeposited.plus(scaledAmount);
   dailyPoolSnapshot.save();
 }
 
@@ -150,8 +152,9 @@ export function withdraw(event: Withdraw): void {
   poolLevel.balance = poolLevel.balance.plus(scaledAmount);
   poolLevel.save();
 
-  dailyPoolSnapshot.totalDeposited =
-    dailyPoolSnapshot.totalDeposited.minus(scaledAmount);
+  dailyPoolSnapshot.totalBalance = pool.totalBalance;
+  dailyPoolSnapshot.dailyWithdrawn =
+    dailyPoolSnapshot.dailyWithdrawn.plus(scaledAmount);
   dailyPoolSnapshot.save();
 }
 
@@ -213,8 +216,9 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
   poolLevel.balance = poolLevel.balance.plus(scaledAmount);
   poolLevel.save();
 
-  dailyPoolSnapshot.totalDeposited =
-    dailyPoolSnapshot.totalDeposited.minus(scaledAmount);
+  dailyPoolSnapshot.totalBalance = pool.totalBalance;
+  dailyPoolSnapshot.dailyWithdrawn =
+    dailyPoolSnapshot.dailyWithdrawn.plus(scaledAmount);
   dailyPoolSnapshot.save();
 }
 

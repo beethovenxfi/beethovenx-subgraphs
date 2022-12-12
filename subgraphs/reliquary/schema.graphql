@@ -51,8 +51,8 @@ type DailyPoolSnapshot @entity {
   poolId: Int!
   snapshotTimestamp: Int!
   totalBalance: BigDecimal!
-  totalDeposited: BigDecimal!
-  totalWithdrawn: BigDecimal!
+  dailyDeposited: BigDecimal!
+  dailyWithdrawn: BigDecimal!
   relicCount: Int!
 }
 

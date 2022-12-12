@@ -158,8 +158,8 @@ export function getOrCreateDailyPoolSnapshot(
     snapshot = new DailyPoolSnapshot(snpashotId);
     snapshot.snapshotTimestamp = timestampStartOfDay;
     snapshot.totalBalance = BigDecimal.zero();
-    snapshot.totalDeposited = BigDecimal.zero();
-    snapshot.totalWithdrawn = BigDecimal.zero();
+    snapshot.dailyDeposited = BigDecimal.zero();
+    snapshot.dailyWithdrawn = BigDecimal.zero();
     snapshot.relicCount = 0;
     snapshot.poolId = pid;
     snapshot.pool = pool.id;
