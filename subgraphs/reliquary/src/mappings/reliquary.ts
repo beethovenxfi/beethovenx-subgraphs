@@ -149,7 +149,7 @@ export function withdraw(event: Withdraw): void {
   dailyRelicSnapshot.save();
 
   const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
-  poolLevel.balance = poolLevel.balance.plus(scaledAmount);
+  poolLevel.balance = poolLevel.balance.minus(scaledAmount);
   poolLevel.save();
 
   dailyPoolSnapshot.totalBalance = pool.totalBalance;
@@ -213,7 +213,7 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
   dailyRelicSnapshot.save();
 
   const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
-  poolLevel.balance = poolLevel.balance.plus(scaledAmount);
+  poolLevel.balance = poolLevel.balance.minus(scaledAmount);
   poolLevel.save();
 
   dailyPoolSnapshot.totalBalance = pool.totalBalance;
