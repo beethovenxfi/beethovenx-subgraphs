@@ -110,12 +110,13 @@ export function deposit(event: Deposit): void {
   dailyRelicSnapshot.balance = relic.balance;
   dailyRelicSnapshot.entryTimestamp = relic.entryTimestamp;
   dailyRelicSnapshot.save();
-
+  
   const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
   poolLevel.balance = poolLevel.balance.plus(scaledAmount);
   poolLevel.save();
-
+  
   dailyPoolSnapshot.totalBalance = pool.totalBalance;
+  dailyPoolSnapshot.relicCount = pool.relicCount;
 
   dailyPoolSnapshot.dailyDeposited =
     dailyPoolSnapshot.dailyDeposited.plus(scaledAmount);
@@ -147,11 +148,12 @@ export function withdraw(event: Withdraw): void {
 
   dailyRelicSnapshot.balance = relic.balance;
   dailyRelicSnapshot.save();
-
+  
   const poolLevel = getPoolLevelOrThrow(relic.pid, relic.level);
   poolLevel.balance = poolLevel.balance.minus(scaledAmount);
   poolLevel.save();
-
+  
+  dailyPoolSnapshot.relicCount = pool.relicCount;
   dailyPoolSnapshot.totalBalance = pool.totalBalance;
   dailyPoolSnapshot.dailyWithdrawn =
     dailyPoolSnapshot.dailyWithdrawn.plus(scaledAmount);
@@ -216,6 +218,7 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
   poolLevel.balance = poolLevel.balance.minus(scaledAmount);
   poolLevel.save();
 
+  dailyPoolSnapshot.relicCount = pool.relicCount;
   dailyPoolSnapshot.totalBalance = pool.totalBalance;
   dailyPoolSnapshot.dailyWithdrawn =
     dailyPoolSnapshot.dailyWithdrawn.plus(scaledAmount);
