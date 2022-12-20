@@ -91,7 +91,7 @@ type User @entity(immutable: true) {
 }
 
 type DailyRelicSnapshot @entity {
-  id: Bytes!
+  id: ID!
   relicId: Int!
   relic: Relic!
   snapshotTimestamp: Int!

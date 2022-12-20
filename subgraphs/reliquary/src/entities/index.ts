@@ -261,17 +261,17 @@ export function createHarvest(
 }
 
 export function getOrCreateDailyRelicSnapshot(
-  relicId: Bytes,
+  relicId: i32,
   userAddress: Bytes,
   timestamp: i32
 ): DailyRelicSnapshot {
   let timestampStartOfDay = timestamp - (timestamp % DAY);
-  const snpashotId = relicId.concatI32(timestampStartOfDay);
+  const snpashotId = relicId.toString().concat(timestampStartOfDay.toString());
   let snapshot = DailyRelicSnapshot.load(snpashotId);
 
   if (snapshot === null) {
     const user = getOrCreateUser(Address.fromBytes(userAddress));
-    const relic = getRelicOrThrow(relicId.toI32());
+    const relic = getRelicOrThrow(relicId);
     snapshot = new DailyRelicSnapshot(snpashotId);
     snapshot.snapshotTimestamp = timestampStartOfDay;
     snapshot.balance = BigDecimal.zero();

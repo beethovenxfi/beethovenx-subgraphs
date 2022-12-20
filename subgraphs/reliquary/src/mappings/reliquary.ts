@@ -90,7 +90,7 @@ export function deposit(event: Deposit): void {
   );
 
   const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
-    relic.id,
+    relic.relicId,
     relic.userAddress,
     event.block.timestamp.toI32()
   );
@@ -133,7 +133,7 @@ export function withdraw(event: Withdraw): void {
     event.block.timestamp.toI32()
   );
   const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
-    relic.id,
+    relic.relicId,
     relic.userAddress,
     event.block.timestamp.toI32()
   );
@@ -169,7 +169,7 @@ export function levelChanged(event: LevelChanged): void {
     return;
   }
   const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
-    relic.id,
+    relic.relicId,
     relic.userAddress,
     event.block.timestamp.toI32()
   );
@@ -201,7 +201,7 @@ export function emergencyWithdraw(event: EmergencyWithdraw): void {
     event.block.timestamp.toI32()
   );
   const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
-    relic.id,
+    relic.relicId,
     relic.userAddress,
     event.block.timestamp.toI32()
   );
@@ -241,13 +241,13 @@ export function split(event: Split): void {
   const params = event.params;
   const relicFrom = getRelicOrThrow(params.fromId.toI32());
   const dailyRelicFromSnapshot = getOrCreateDailyRelicSnapshot(
-    relicFrom.id,
+    relicFrom.relicId,
     relicFrom.userAddress,
     event.block.timestamp.toI32()
   );
   const relicTo = getRelicOrThrow(params.toId.toI32());
   const dailyRelicToSnapshot = getOrCreateDailyRelicSnapshot(
-    relicTo.id,
+    relicTo.relicId,
     relicTo.userAddress,
     event.block.timestamp.toI32()
   );
@@ -277,13 +277,13 @@ export function shift(event: Shift): void {
 
   const relicFrom = getRelicOrThrow(params.fromId.toI32());
   const dailyRelicFromSnapshot = getOrCreateDailyRelicSnapshot(
-    relicFrom.id,
+    relicFrom.relicId,
     relicFrom.userAddress,
     event.block.timestamp.toI32()
   );
   const relicTo = getRelicOrThrow(params.toId.toI32());
   const dailyRelicToSnapshot = getOrCreateDailyRelicSnapshot(
-    relicTo.id,
+    relicTo.relicId,
     relicTo.userAddress,
     event.block.timestamp.toI32()
   );
@@ -321,13 +321,13 @@ export function merge(event: Merge): void {
 
   const relicFrom = getRelicOrThrow(params.fromId.toI32());
   const dailyRelicFromSnapshot = getOrCreateDailyRelicSnapshot(
-    relicFrom.id,
+    relicFrom.relicId,
     relicFrom.userAddress,
     event.block.timestamp.toI32()
   );
   const relicTo = getRelicOrThrow(params.toId.toI32());
   const dailyRelicToSnapshot = getOrCreateDailyRelicSnapshot(
-    relicTo.id,
+    relicTo.relicId,
     relicTo.userAddress,
     event.block.timestamp.toI32()
   );
@@ -399,7 +399,7 @@ export function transfer(event: Transfer): void {
     // account transfer
     const relic = getRelicOrThrow(event.params.tokenId.toI32());
     const dailyRelicSnapshot = getOrCreateDailyRelicSnapshot(
-      relic.id,
+      relic.relicId,
       relic.userAddress,
       event.block.timestamp.toI32()
     );
