@@ -1,930 +1,288 @@
-{
-  "abi": [
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_rewardPerSecond",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "rewardsPerSecond",
-          "type": "uint256"
-        }
-      ],
-      "name": "EmissionUpdate",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "previousOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "OwnershipTransferred",
-      "type": "event"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "lastRewardTime",
-          "type": "uint256"
-        }
-      ],
-      "name": "getRate",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "rewardPerSecond",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_rewardPerSecond",
-          "type": "uint256"
-        }
-      ],
-      "name": "setRate",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "transferOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ],
-  "bytecode": {
-    "object": "0x60803461009757601f61037a38819003918201601f19168301916001600160401b0383118484101761009c57808492602094604052833981010312610097575160008054336001600160a01b0319821681178355604051939290916001600160a01b0316907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09085a36001556102c790816100b38239f35b600080fd5b634e487b7160e01b600052604160045260246000fdfe604060808152600436101561001357600080fd5b600090813560e01c806334fcf437146101ec57806357764094146101cd578063715018a6146101715780638da5cb5b1461014a5780638f10369a1461012c5763f2fde38b1461006157600080fd5b34610128576020366003190112610128576004356001600160a01b038181169182900361012457610090610239565b81156100d15783546001600160a01b0319811683178555925192167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e08484a3f35b825162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b6064820152608490fd5b8380fd5b5080fd5b50346101285781600319360112610128576020906001549051908152f35b5034610128578160031936011261012857905490516001600160a01b039091168152602090f35b503461012857816003193601126101285761018a610239565b81546001600160a01b03198116835590519082906001600160a01b03167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e08284a3f35b5034610128576020366003190112610128576020906001549051908152f35b5034610128576020366003190112610128577f60daeac203edf50b77961db1f8250bab4b50d92e67e2ea4936ac6ac71a208e15602060043561022c610239565b806001558351908152a151f35b6000546001600160a01b0316330361024d57565b606460405162461bcd60e51b815260206004820152602060248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152fdfea26469706673582212208d0ea635b83de0adaa9e05d5540882dfc948533f96912f07af9cf19cb7b2d83764736f6c63430008100033",
-    "sourceMap": "166:540:1:-:0;;;;;;;;;;;;;-1:-1:-1;;166:540:1;;;;-1:-1:-1;;;;;166:540:1;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;166:540:1;;719:10:35;-1:-1:-1;;;;;;166:540:1;;;;;;;;;;719:10:35;;-1:-1:-1;;;;;166:540:1;;2573:40:20;;166:540:1;2573:40:20;166:540:1;;;;;;;;;;-1:-1:-1;166:540:1;;;;;;-1:-1:-1;166:540:1;;;;;-1:-1:-1;166:540:1",
-    "linkReferences": {}
-  },
-  "deployedBytecode": {
-    "object": "0x604060808152600436101561001357600080fd5b600090813560e01c806334fcf437146101ec57806357764094146101cd578063715018a6146101715780638da5cb5b1461014a5780638f10369a1461012c5763f2fde38b1461006157600080fd5b34610128576020366003190112610128576004356001600160a01b038181169182900361012457610090610239565b81156100d15783546001600160a01b0319811683178555925192167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e08484a3f35b825162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b6064820152608490fd5b8380fd5b5080fd5b50346101285781600319360112610128576020906001549051908152f35b5034610128578160031936011261012857905490516001600160a01b039091168152602090f35b503461012857816003193601126101285761018a610239565b81546001600160a01b03198116835590519082906001600160a01b03167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e08284a3f35b5034610128576020366003190112610128576020906001549051908152f35b5034610128576020366003190112610128577f60daeac203edf50b77961db1f8250bab4b50d92e67e2ea4936ac6ac71a208e15602060043561022c610239565b806001558351908152a151f35b6000546001600160a01b0316330361024d57565b606460405162461bcd60e51b815260206004820152602060248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152fdfea26469706673582212208d0ea635b83de0adaa9e05d5540882dfc948533f96912f07af9cf19cb7b2d83764736f6c63430008100033",
-    "sourceMap": "166:540:1:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;166:540:1;;;;;;-1:-1:-1;;;;;166:540:1;;;;;;;;;1063:62:20;;:::i;:::-;2169:22;;166:540:1;;;;-1:-1:-1;;;;;;166:540:1;;;;;;;;;;2573:40:20;166:540:1;;2573:40:20;166:540:1;;;;-1:-1:-1;;;166:540:1;;;;;;;;;;;;;;;;;-1:-1:-1;;;166:540:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;300:27;166:540;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;166:540:1;;;;;;;;;;;;;;;;;;;;;1063:62:20;;:::i;:::-;166:540:1;;-1:-1:-1;;;;;;166:540:1;;;;;;;;;-1:-1:-1;;;;;166:540:1;2573:40:20;166:540:1;;2573:40:20;166:540:1;;;;;;;;-1:-1:-1;;166:540:1;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;166:540:1;;;;665:32;166:540;;;1063:62:20;;:::i;:::-;166:540:1;;;;;;;;665:32;166:540;;1359:130:20;1273:6;166:540:1;-1:-1:-1;;;;;166:540:1;719:10:35;1422:23:20;166:540:1;;1359:130:20:o;166:540:1:-;;;;;;;;;;;;;;;;;;;;;;;;",
-    "linkReferences": {}
-  },
-  "methodIdentifiers": {
-    "getRate(uint256)": "57764094",
-    "owner()": "8da5cb5b",
-    "renounceOwnership()": "715018a6",
-    "rewardPerSecond()": "8f10369a",
-    "setRate(uint256)": "34fcf437",
-    "transferOwnership(address)": "f2fde38b"
-  },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_rewardPerSecond\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rewardsPerSecond\",\"type\":\"uint256\"}],\"name\":\"EmissionUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lastRewardTime\",\"type\":\"uint256\"}],\"name\":\"getRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rewardPerSecond\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_rewardPerSecond\",\"type\":\"uint256\"}],\"name\":\"setRate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/emission_curves/BeetsConstantEmissionCurve.sol\":\"BeetsConstantEmissionCurve\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":base64/=lib/base64/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":v2-core/=lib/v2-core/contracts/\"],\"viaIR\":true},\"sources\":{\"contracts/emission_curves/BeetsConstantEmissionCurve.sol\":{\"keccak256\":\"0x458054707afd94e57878137c7c2250bf410a42d398649242ddb232a7b14a9c12\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9ab25d7b6387b30f8bd72567718cd2c8931222cfcd2339a600c747668827b9b7\",\"dweb:/ipfs/QmYQNLxdfrMNv7kdKVAwketzXchnH2koHxpUhpZvU1B7HZ\"]},\"contracts/interfaces/IEmissionCurve.sol\":{\"keccak256\":\"0x79051ecd54dab403f1b9d9105447c5a5725e6516f5d92f496371248e7d7e4054\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9d1dbf0dde3c38410b63eb6ea33b51da6029973d672e57652200e10f0019cb0a\",\"dweb:/ipfs/QmZoGrxZrjAJUA7U2X4UAMsFrRc1WSQzcCQscSKhEYCGrW\"]},\"lib/openzeppelin-contracts/contracts/access/Ownable.sol\":{\"keccak256\":\"0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://40fb1b5102468f783961d0af743f91b9980cf66b50d1d12009f6bb1869cea4d2\",\"dweb:/ipfs/QmYqEbJML4jB1GHbzD4cUZDtJg5wVwNm3vDJq1GbyDus8y\"]},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]}},\"version\":1}",
-  "metadata": {
-    "compiler": {
-      "version": "0.8.16+commit.07a7930e"
-    },
-    "language": "Solidity",
-    "output": {
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_rewardPerSecond",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "rewardsPerSecond",
-              "type": "uint256",
-              "indexed": false
-            }
-          ],
-          "type": "event",
-          "name": "EmissionUpdate",
-          "anonymous": false
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "previousOwner",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address",
-              "indexed": true
-            }
-          ],
-          "type": "event",
-          "name": "OwnershipTransferred",
-          "anonymous": false
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "lastRewardTime",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "getRate",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ]
-        },
-        {
-          "inputs": [],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "owner",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ]
-        },
-        {
-          "inputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "renounceOwnership"
-        },
-        {
-          "inputs": [],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "rewardPerSecond",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ]
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_rewardPerSecond",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setRate"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "newOwner",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "transferOwnership"
-        }
-      ],
-      "devdoc": {
-        "kind": "dev",
-        "methods": {
-          "owner()": {
-            "details": "Returns the address of the current owner."
-          },
-          "renounceOwnership()": {
-            "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
-          },
-          "transferOwnership(address)": {
-            "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
-          }
-        },
-        "version": 1
-      },
-      "userdoc": {
-        "kind": "user",
-        "methods": {},
-        "version": 1
-      }
-    },
-    "settings": {
-      "remappings": [
-        ":base64/=lib/base64/",
-        ":ds-test/=lib/forge-std/lib/ds-test/src/",
-        ":forge-std/=lib/forge-std/src/",
-        ":openzeppelin-contracts/=lib/openzeppelin-contracts/",
-        ":v2-core/=lib/v2-core/contracts/"
-      ],
-      "optimizer": {
-        "enabled": true,
-        "runs": 200
-      },
-      "metadata": {
-        "bytecodeHash": "ipfs"
-      },
-      "compilationTarget": {
-        "contracts/emission_curves/BeetsConstantEmissionCurve.sol": "BeetsConstantEmissionCurve"
-      },
-      "libraries": {},
-      "viaIR": true
-    },
-    "sources": {
-      "contracts/emission_curves/BeetsConstantEmissionCurve.sol": {
-        "keccak256": "0x458054707afd94e57878137c7c2250bf410a42d398649242ddb232a7b14a9c12",
-        "urls": [
-          "bzz-raw://9ab25d7b6387b30f8bd72567718cd2c8931222cfcd2339a600c747668827b9b7",
-          "dweb:/ipfs/QmYQNLxdfrMNv7kdKVAwketzXchnH2koHxpUhpZvU1B7HZ"
-        ],
-        "license": "MIT"
-      },
-      "contracts/interfaces/IEmissionCurve.sol": {
-        "keccak256": "0x79051ecd54dab403f1b9d9105447c5a5725e6516f5d92f496371248e7d7e4054",
-        "urls": [
-          "bzz-raw://9d1dbf0dde3c38410b63eb6ea33b51da6029973d672e57652200e10f0019cb0a",
-          "dweb:/ipfs/QmZoGrxZrjAJUA7U2X4UAMsFrRc1WSQzcCQscSKhEYCGrW"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/access/Ownable.sol": {
-        "keccak256": "0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673",
-        "urls": [
-          "bzz-raw://40fb1b5102468f783961d0af743f91b9980cf66b50d1d12009f6bb1869cea4d2",
-          "dweb:/ipfs/QmYqEbJML4jB1GHbzD4cUZDtJg5wVwNm3vDJq1GbyDus8y"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/utils/Context.sol": {
-        "keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
-        "urls": [
-          "bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92",
-          "dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
-        ],
-        "license": "MIT"
-      }
-    },
-    "version": 1
-  },
-  "ast": {
-    "absolutePath": "contracts/emission_curves/BeetsConstantEmissionCurve.sol",
-    "id": 2824,
-    "exportedSymbols": {
-      "BeetsConstantEmissionCurve": [
-        2823
-      ],
-      "Context": [
-        29086
-      ],
-      "IEmissionCurve": [
-        3141
-      ],
-      "Ownable": [
-        26671
-      ]
-    },
-    "nodeType": "SourceUnit",
-    "src": "34:673:1",
-    "nodes": [
+[
+  {
+    "inputs": [
       {
-        "id": 2773,
-        "nodeType": "PragmaDirective",
-        "src": "34:24:1",
-        "literals": [
-          "solidity",
-          "^",
-          "0.8",
-          ".15"
-        ]
-      },
-      {
-        "id": 2774,
-        "nodeType": "ImportDirective",
-        "src": "60:42:1",
-        "absolutePath": "contracts/interfaces/IEmissionCurve.sol",
-        "file": "../interfaces/IEmissionCurve.sol",
-        "nameLocation": "-1:-1:-1",
-        "scope": 2824,
-        "sourceUnit": 3142,
-        "symbolAliases": [],
-        "unitAlias": ""
-      },
-      {
-        "id": 2775,
-        "nodeType": "ImportDirective",
-        "src": "103:61:1",
-        "absolutePath": "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
-        "file": "openzeppelin-contracts/contracts/access/Ownable.sol",
-        "nameLocation": "-1:-1:-1",
-        "scope": 2824,
-        "sourceUnit": 26672,
-        "symbolAliases": [],
-        "unitAlias": ""
-      },
-      {
-        "id": 2823,
-        "nodeType": "ContractDefinition",
-        "src": "166:540:1",
-        "nodes": [
-          {
-            "id": 2783,
-            "nodeType": "EventDefinition",
-            "src": "236:58:1",
-            "anonymous": false,
-            "eventSelector": "60daeac203edf50b77961db1f8250bab4b50d92e67e2ea4936ac6ac71a208e15",
-            "name": "EmissionUpdate",
-            "nameLocation": "242:14:1",
-            "parameters": {
-              "id": 2782,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 2781,
-                  "indexed": false,
-                  "mutability": "mutable",
-                  "name": "rewardsPerSecond",
-                  "nameLocation": "271:16:1",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 2783,
-                  "src": "266:21:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 2780,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "266:4:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "256:37:1"
-            }
-          },
-          {
-            "id": 2785,
-            "nodeType": "VariableDeclaration",
-            "src": "300:27:1",
-            "constant": false,
-            "functionSelector": "8f10369a",
-            "mutability": "mutable",
-            "name": "rewardPerSecond",
-            "nameLocation": "312:15:1",
-            "scope": 2823,
-            "stateVariable": true,
-            "storageLocation": "default",
-            "typeDescriptions": {
-              "typeIdentifier": "t_uint256",
-              "typeString": "uint256"
-            },
-            "typeName": {
-              "id": 2784,
-              "name": "uint",
-              "nodeType": "ElementaryTypeName",
-              "src": "300:4:1",
-              "typeDescriptions": {
-                "typeIdentifier": "t_uint256",
-                "typeString": "uint256"
-              }
-            },
-            "visibility": "public"
-          },
-          {
-            "id": 2795,
-            "nodeType": "FunctionDefinition",
-            "src": "334:86:1",
-            "body": {
-              "id": 2794,
-              "nodeType": "Block",
-              "src": "369:51:1",
-              "statements": [
-                {
-                  "expression": {
-                    "id": 2792,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "leftHandSide": {
-                      "id": 2790,
-                      "name": "rewardPerSecond",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 2785,
-                      "src": "379:15:1",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "nodeType": "Assignment",
-                    "operator": "=",
-                    "rightHandSide": {
-                      "id": 2791,
-                      "name": "_rewardPerSecond",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 2787,
-                      "src": "397:16:1",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "src": "379:34:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "id": 2793,
-                  "nodeType": "ExpressionStatement",
-                  "src": "379:34:1"
-                }
-              ]
-            },
-            "implemented": true,
-            "kind": "constructor",
-            "modifiers": [],
-            "name": "",
-            "nameLocation": "-1:-1:-1",
-            "parameters": {
-              "id": 2788,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 2787,
-                  "mutability": "mutable",
-                  "name": "_rewardPerSecond",
-                  "nameLocation": "351:16:1",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 2795,
-                  "src": "346:21:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 2786,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "346:4:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "345:23:1"
-            },
-            "returnParameters": {
-              "id": 2789,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "369:0:1"
-            },
-            "scope": 2823,
-            "stateMutability": "nonpayable",
-            "virtual": false,
-            "visibility": "public"
-          },
-          {
-            "id": 2806,
-            "nodeType": "FunctionDefinition",
-            "src": "426:115:1",
-            "body": {
-              "id": 2805,
-              "nodeType": "Block",
-              "src": "502:39:1",
-              "statements": [
-                {
-                  "expression": {
-                    "id": 2803,
-                    "name": "rewardPerSecond",
-                    "nodeType": "Identifier",
-                    "overloadedDeclarations": [],
-                    "referencedDeclaration": 2785,
-                    "src": "519:15:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "functionReturnParameters": 2802,
-                  "id": 2804,
-                  "nodeType": "Return",
-                  "src": "512:22:1"
-                }
-              ]
-            },
-            "baseFunctions": [
-              3140
-            ],
-            "functionSelector": "57764094",
-            "implemented": true,
-            "kind": "function",
-            "modifiers": [],
-            "name": "getRate",
-            "nameLocation": "435:7:1",
-            "overrides": {
-              "id": 2799,
-              "nodeType": "OverrideSpecifier",
-              "overrides": [],
-              "src": "478:8:1"
-            },
-            "parameters": {
-              "id": 2798,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 2797,
-                  "mutability": "mutable",
-                  "name": "lastRewardTime",
-                  "nameLocation": "448:14:1",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 2806,
-                  "src": "443:19:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 2796,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "443:4:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "442:21:1"
-            },
-            "returnParameters": {
-              "id": 2802,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 2801,
-                  "mutability": "mutable",
-                  "name": "",
-                  "nameLocation": "-1:-1:-1",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 2806,
-                  "src": "496:4:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 2800,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "496:4:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "495:6:1"
-            },
-            "scope": 2823,
-            "stateMutability": "view",
-            "virtual": false,
-            "visibility": "external"
-          },
-          {
-            "id": 2822,
-            "nodeType": "FunctionDefinition",
-            "src": "547:157:1",
-            "body": {
-              "id": 2821,
-              "nodeType": "Block",
-              "src": "606:98:1",
-              "statements": [
-                {
-                  "expression": {
-                    "id": 2815,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "leftHandSide": {
-                      "id": 2813,
-                      "name": "rewardPerSecond",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 2785,
-                      "src": "616:15:1",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "nodeType": "Assignment",
-                    "operator": "=",
-                    "rightHandSide": {
-                      "id": 2814,
-                      "name": "_rewardPerSecond",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 2808,
-                      "src": "634:16:1",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "src": "616:34:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "id": 2816,
-                  "nodeType": "ExpressionStatement",
-                  "src": "616:34:1"
-                },
-                {
-                  "eventCall": {
-                    "arguments": [
-                      {
-                        "id": 2818,
-                        "name": "_rewardPerSecond",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 2808,
-                        "src": "680:16:1",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
-                        }
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
-                        }
-                      ],
-                      "id": 2817,
-                      "name": "EmissionUpdate",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 2783,
-                      "src": "665:14:1",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_event_nonpayable$_t_uint256_$returns$__$",
-                        "typeString": "function (uint256)"
-                      }
-                    },
-                    "id": 2819,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "nameLocations": [],
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "665:32:1",
-                    "tryCall": false,
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$__$",
-                      "typeString": "tuple()"
-                    }
-                  },
-                  "id": 2820,
-                  "nodeType": "EmitStatement",
-                  "src": "660:37:1"
-                }
-              ]
-            },
-            "functionSelector": "34fcf437",
-            "implemented": true,
-            "kind": "function",
-            "modifiers": [
-              {
-                "id": 2811,
-                "kind": "modifierInvocation",
-                "modifierName": {
-                  "id": 2810,
-                  "name": "onlyOwner",
-                  "nameLocations": [
-                    "596:9:1"
-                  ],
-                  "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 26590,
-                  "src": "596:9:1"
-                },
-                "nodeType": "ModifierInvocation",
-                "src": "596:9:1"
-              }
-            ],
-            "name": "setRate",
-            "nameLocation": "556:7:1",
-            "parameters": {
-              "id": 2809,
-              "nodeType": "ParameterList",
-              "parameters": [
-                {
-                  "constant": false,
-                  "id": 2808,
-                  "mutability": "mutable",
-                  "name": "_rewardPerSecond",
-                  "nameLocation": "569:16:1",
-                  "nodeType": "VariableDeclaration",
-                  "scope": 2822,
-                  "src": "564:21:1",
-                  "stateVariable": false,
-                  "storageLocation": "default",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
-                  },
-                  "typeName": {
-                    "id": 2807,
-                    "name": "uint",
-                    "nodeType": "ElementaryTypeName",
-                    "src": "564:4:1",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "visibility": "internal"
-                }
-              ],
-              "src": "563:23:1"
-            },
-            "returnParameters": {
-              "id": 2812,
-              "nodeType": "ParameterList",
-              "parameters": [],
-              "src": "606:0:1"
-            },
-            "scope": 2823,
-            "stateMutability": "nonpayable",
-            "virtual": false,
-            "visibility": "external"
-          }
-        ],
-        "abstract": false,
-        "baseContracts": [
-          {
-            "baseName": {
-              "id": 2776,
-              "name": "IEmissionCurve",
-              "nameLocations": [
-                "205:14:1"
-              ],
-              "nodeType": "IdentifierPath",
-              "referencedDeclaration": 3141,
-              "src": "205:14:1"
-            },
-            "id": 2777,
-            "nodeType": "InheritanceSpecifier",
-            "src": "205:14:1"
-          },
-          {
-            "baseName": {
-              "id": 2778,
-              "name": "Ownable",
-              "nameLocations": [
-                "221:7:1"
-              ],
-              "nodeType": "IdentifierPath",
-              "referencedDeclaration": 26671,
-              "src": "221:7:1"
-            },
-            "id": 2779,
-            "nodeType": "InheritanceSpecifier",
-            "src": "221:7:1"
-          }
-        ],
-        "canonicalName": "BeetsConstantEmissionCurve",
-        "contractDependencies": [],
-        "contractKind": "contract",
-        "fullyImplemented": true,
-        "linearizedBaseContracts": [
-          2823,
-          26671,
-          29086,
-          3141
-        ],
-        "name": "BeetsConstantEmissionCurve",
-        "nameLocation": "175:26:1",
-        "scope": 2824,
-        "usedErrors": []
+        "internalType": "uint256",
+        "name": "_rewardPerSecond",
+        "type": "uint256"
       }
     ],
-    "license": "MIT"
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
-  "id": 1
-}
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rate",
+        "type": "uint256"
+      }
+    ],
+    "name": "LogRate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "previousAdminRole",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "newAdminRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RoleAdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleGranted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleRevoked",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "DEFAULT_ADMIN_ROLE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "OPERATOR",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "getRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getRoleAdmin",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "hasRole",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rewardPerSecond",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_rewardPerSecond",
+        "type": "uint256"
+      }
+    ],
+    "name": "setRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
+    ],
+    "name": "supportsInterface",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

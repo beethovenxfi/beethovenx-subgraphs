@@ -85,5 +85,5 @@ templates:
         - name: ERC721
           file: './abis/ERC721.json'
       eventHandlers:
-        - event: EmissionUpdate(uint256)
+        - event: LogRate(uint256)
           handler: emissionUpdate
