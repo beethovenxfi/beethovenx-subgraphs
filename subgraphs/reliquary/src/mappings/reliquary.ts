@@ -28,7 +28,7 @@ import {
     getRelicOrThrow,
 } from '../entities';
 import { scaleDown } from '../utils/numbers';
-import { EmissionUpdate } from '../../generated/Reliquary/BeetsConstantEmissionCurve';
+import { LogRate } from '../../generated/Reliquary/BeetsConstantEmissionCurve';
 import { Relic } from '../../generated/schema';
 
 export function logPoolAddition(event: LogPoolAddition): void {
@@ -373,8 +373,8 @@ export function transfer(event: Transfer): void {
     }
 }
 
-export function emissionUpdate(event: EmissionUpdate): void {
+export function emissionUpdate(event: LogRate): void {
     const emissionCurve = getOrCreateEmissionCurve(dataSource.address());
-    emissionCurve.rewardPerSecond = scaleDown(event.params.rewardsPerSecond, 18);
+    emissionCurve.rewardPerSecond = scaleDown(event.params.rate, 18);
     emissionCurve.save();
 }
