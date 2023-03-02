@@ -105,6 +105,7 @@ export function createPool(
 
     reliquary.totalAllocPoint = reliquary.totalAllocPoint + pool.allocPoint;
     reliquary.poolCount = reliquary.poolCount + 1;
+    reliquary.save();
 
     return pool;
 }
