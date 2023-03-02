@@ -33,9 +33,9 @@ export function getOrCreateReliquary(): Reliquary {
         reliquary = new Reliquary(address);
         reliquary.emissionToken = rewardToken.id;
         reliquary.emissionCurve = emissionCurve.id;
-        reliquary.totalAllocPoint = reliquaryContract.totalAllocPoint().toI32();
-        reliquary.poolCount = reliquaryContract.poolLength().toI32();
-        reliquary.relicCount = reliquaryContract.totalSupply().toI32();
+        reliquary.totalAllocPoint = 0;
+        reliquary.poolCount = 0;
+        reliquary.relicCount = 0;
         reliquary.save();
     }
     return reliquary;
