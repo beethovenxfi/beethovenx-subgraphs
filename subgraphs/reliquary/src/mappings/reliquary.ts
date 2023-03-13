@@ -347,6 +347,7 @@ export function transfer(event: Transfer): void {
         reliquary.relicCount--;
         reliquary.save();
         relic.user = getOrCreateUser(Address.zero()).address;
+        relic.userAddress = getOrCreateUser(Address.zero()).address;
         relic.save();
 
         const pool = getPoolOrThrow(relic.pid);
@@ -365,6 +366,7 @@ export function transfer(event: Transfer): void {
         );
         const userTo = getOrCreateUser(Address.fromBytes(relic.user));
         relic.user = userTo.id;
+        relic.userAddress = userTo.id;
         relic.save();
 
         dailyRelicSnapshot.user = userTo.id;
