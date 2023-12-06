@@ -1,0 +1,43 @@
+type FtmStaking @entity {
+  id: Bytes!
+  # validatorPicker: Bytes!
+  # epochDuration: Int!
+  # withdrawalDelay: Int!
+
+  #TODO implement these and sync to API for UI calls
+  undelegatePaused: Boolean!
+  withdrawPaused: Boolean!
+  maintenancePaused: Boolean!
+  minDepositLimit: BigInt!
+  maxDepositLimit: BigInt!
+
+  vaults: [Vault!] @derivedFrom(field: "ftmStaking")
+  users: [User!] @derivedFrom(field: "ftmStaking")
+}
+
+type Vault @entity {
+  id: Bytes!
+  ftmStaking: FtmStaking!
+  amountLocked: BigDecimal!
+  lockupDuration: BigInt!
+  lockupTimestamp: BigInt!
+  lockExpireTimestamp: BigInt!
+  toValidatorId: BigInt!
+  toValidatorAddress: Bytes!
+  isHarvested: Boolean!
+  isWithdrawn: Boolean!
+}
+
+type User @entity {
+  id: Bytes!
+  ftmStaking: FtmStaking!
+  withdrawalRequests: [WithdrawalRequest!] @derivedFrom(field: "user")
+}
+
+type WithdrawalRequest @entity {
+  id: String!
+  user: User!
+  amount: BigDecimal!
+  requestTime: Int!
+  isWithdrawn: Boolean!
+}

@@ -1,0 +1,27 @@
+{
+  "name": "reliquary",
+  "private": true,
+  "license": "MIT",
+  "version": "1.0.0",
+  "author": "BeethovenX",
+  "scripts": {
+    "codegen": "graph codegen subgraph.yaml",
+    "build": "graph build subgraph.yaml",
+    "create-local": "graph create --node http://localhost:8020/",
+    "remove-local": "graph remove --node http://localhost:8020/ beetx-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 beetx-subgraph",
+    "deploy:goerli": "yarn graph deploy --product hosted-service 0xskly/beethovenx-reliquary-goerli",
+    "auth-hosted": "yarn graph auth --product hosted-service",
+    "deploy-hosted": "yarn graph deploy --product hosted-service beethovenxfi/reliquary"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.34.0",
+    "@graphprotocol/graph-ts": "^0.28.0",
+    "ejs": "^3.1.6",
+    "handlebars": "^4.7.7",
+    "matchstick-as": "^0.3.0",
+    "mustache": "^4.2.0",
+    "prettier": "^2.0.0",
+    "typescript": "^4.0.0"
+  }
+}

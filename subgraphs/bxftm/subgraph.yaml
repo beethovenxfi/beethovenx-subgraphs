@@ -1,0 +1,71 @@
+specVersion: 0.0.4
+description: FTMStaking
+repository: https://github.com/beethovenxfi/beethovenx-token-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: FTMStaking
+    network: fantom 
+    source:
+      address: "0xB458BfC855ab504a8a327720FcEF98886065529b"
+      abi: FTMStaking
+      startBlock: 36518660
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/ftmstaking.ts
+      entities:
+        - FtmStaking
+        - Vault
+        - User
+        - WithdrawalRequest
+      abis:
+        - name: FTMStaking
+          file: ./abis/FTMStaking.json
+        - name: Vault
+          file: ./abis/Vault.json
+      eventHandlers:
+      #   - event: LogValidatorPickerSet(indexed address,address)
+      #     handler: logValidatorPickerSet
+      #   - event: LogEpochDurationSet(indexed address,uint256)
+      #     handler: logEpochDurationSet
+      #   - event: LogWithdrawalDelaySet(indexed address,uint256)
+      #     handler: logWithdrawalDelaySet
+        - event: LogUndelegatePausedUpdated(indexed address,bool)
+          handler: logUndelegatePausedUpdated
+        - event: LogWithdrawPausedUpdated(indexed address,bool)
+          handler: logWithdrawPausedUpdated
+        - event: LogMaintenancePausedUpdated(indexed address,bool)
+          handler: logMaintenancePausedUpdated
+        - event: LogDepositLimitUpdated(indexed address,uint256,uint256)
+          handler: logDepositLimitUpdated
+        - event: LogVaultHarvested(indexed address,uint256)
+          handler: logVaultHarvested
+        - event: LogVaultWithdrawn(indexed address)
+          handler: logVaultWithdrawn
+        - event: LogLocked(indexed address,uint256,uint256)
+          handler: logLocked
+        - event: LogUndelegated(indexed address,uint256,uint256)
+          handler: logUndelegated
+        - event: LogWithdrawn(indexed address,uint256,uint256,uint256)
+          handler: logWithdrawn
+templates:
+  - kind: ethereum/contract
+    name: Vault 
+    network: fantom 
+    source:
+      abi: Vault 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/ftmstaking.ts
+      entities:
+        - Vault
+      abis:
+        - name: FTMStaking
+          file: ./abis/FTMStaking.json
+        - name: Vault
+          file: ./abis/Vault.json
