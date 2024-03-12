@@ -1,5 +1,9 @@
-import { Address, dataSource, BigInt } from '@graphprotocol/graph-ts'
-import { FtmStaking, User } from '../../generated/schema'
+import { Address, dataSource, BigInt, BigDecimal, Bytes } from '@graphprotocol/graph-ts'
+import { FtmStaking, FtmStakingSnapshot, User } from '../../generated/schema'
+import { DailyPoolSnapshot } from '../../../reliquary/generated/schema'
+import { getPoolOrThrow } from '../../../reliquary/src/entities'
+
+const DAY = 24 * 60 * 60
 
 export function getOrCreateFtmStaking(): FtmStaking {
     const address = dataSource.address()
@@ -25,4 +29,20 @@ export function getOrCreateUser(id: Address): User {
         user.save()
     }
     return user
+}
+
+export function getOrCreateFtmStakingSnapshot(timestamp: i32): FtmStakingSnapshot {
+    let timestampStartOfDay = timestamp - (timestamp % DAY)
+    const snpashotId = dataSource.address().concatI32(timestampStartOfDay)
+    let snapshot = FtmStakingSnapshot.load(snpashotId)
+
+    if (snapshot === null) {
+        snapshot = new FtmStakingSnapshot(snpashotId)
+        snapshot.snapshotTimestamp = timestampStartOfDay
+        snapshot.freePoolFtmAmount = BigDecimal.zero()
+        snapshot.lockedFtmAmount = BigDecimal.zero()
+        snapshot.totalFtmAmount = BigDecimal.zero()
+        snapshot.save()
+    }
+    return snapshot
 }

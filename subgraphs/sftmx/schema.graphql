@@ -15,6 +15,14 @@ type FtmStaking @entity {
   users: [User!] @derivedFrom(field: "ftmStaking")
 }
 
+type FtmStakingSnapshot @entity {
+  id: Bytes!
+  snapshotTimestamp: Int!
+  freePoolFtmAmount: BigDecimal!
+  lockedFtmAmount: BigDecimal!
+  totalFtmAmount: BigDecimal!
+}
+
 type Vault @entity {
   id: Bytes!
   ftmStaking: FtmStaking!

@@ -1,5 +1,6 @@
 import {
     LogDepositLimitUpdated,
+    LogDeposited,
     LogLocked,
     LogMaintenancePausedUpdated,
     LogUndelegatePausedUpdated,
@@ -10,9 +11,10 @@ import {
     LogWithdrawn,
 } from '../../generated/FTMStaking/FTMStaking'
 import { Vault, WithdrawalRequest } from '../../generated/schema'
-import { getOrCreateFtmStaking, getOrCreateUser } from '../entities'
+import { getOrCreateFtmStaking, getOrCreateFtmStakingSnapshot, getOrCreateUser } from '../entities'
 import { Vault as VaultContract } from '../../generated/FTMStaking/Vault'
-import { log } from '@graphprotocol/graph-ts'
+import { FTMStaking as StakingContract } from '../../generated/FTMStaking/FTMStaking'
+import { dataSource, log } from '@graphprotocol/graph-ts'
 import { scaleDown } from '../utils/numbers'
 
 export function logLocked(event: LogLocked): void {
@@ -59,9 +61,35 @@ export function logWithdrawn(event: LogWithdrawn): void {
     const params = event.params
     const wrId = params.wrID
 
+    const stakingSnapshot = getOrCreateFtmStakingSnapshot(event.block.timestamp.toI32())
+
+    const stakingContract = StakingContract.bind(dataSource.address())
+    const ftmPoolBalance = stakingContract.getPoolBalance()
+    const totalFtm = stakingContract.totalFTMWorth()
+    const lockedFtm = totalFtm.minus(ftmPoolBalance)
+
+    stakingSnapshot.freePoolFtmAmount = scaleDown(ftmPoolBalance, 18)
+    stakingSnapshot.lockedFtmAmount = scaleDown(lockedFtm, 18)
+    stakingSnapshot.totalFtmAmount = scaleDown(totalFtm, 18)
+    stakingSnapshot.save()
+
     const withdrawalRequest = new WithdrawalRequest(wrId.toString())
     withdrawalRequest.isWithdrawn = true
     withdrawalRequest.save()
+}
+
+export function logDeposited(event: LogDeposited): void {
+    const stakingSnapshot = getOrCreateFtmStakingSnapshot(event.block.timestamp.toI32())
+
+    const stakingContract = StakingContract.bind(dataSource.address())
+    const ftmPoolBalance = stakingContract.getPoolBalance()
+    const totalFtm = stakingContract.totalFTMWorth()
+    const lockedFtm = totalFtm.minus(ftmPoolBalance)
+
+    stakingSnapshot.freePoolFtmAmount = scaleDown(ftmPoolBalance, 18)
+    stakingSnapshot.lockedFtmAmount = scaleDown(lockedFtm, 18)
+    stakingSnapshot.totalFtmAmount = scaleDown(totalFtm, 18)
+    stakingSnapshot.save()
 }
 
 export function logVaultHarvested(event: LogVaultHarvested): void {

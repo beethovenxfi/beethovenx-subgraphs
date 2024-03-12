@@ -51,6 +51,8 @@ dataSources:
           handler: logUndelegated
         - event: LogWithdrawn(indexed address,uint256,uint256,uint256)
           handler: logWithdrawn
+        - event: LogDeposited(indexed address,uint256,uint256)
+          handler: logDeposited
 templates:
   - kind: ethereum/contract
     name: Vault 
