@@ -21,6 +21,7 @@ type FtmStakingSnapshot @entity {
   freePoolFtmAmount: BigDecimal!
   lockedFtmAmount: BigDecimal!
   totalFtmAmount: BigDecimal!
+  exchangeRate: BigDecimal!
 }
 
 type Vault @entity {

@@ -37,6 +37,8 @@ export function logLocked(event: LogLocked): void {
     vault.isHarvested = false
     vault.isWithdrawn = false
     vault.save()
+
+    takeSnapshot(event.block.timestamp.toI32())
 }
 
 export function logUndelegated(event: LogUndelegated): void {
@@ -55,23 +57,15 @@ export function logUndelegated(event: LogUndelegated): void {
     withdrawalRequest.save()
 
     user.save()
+
+    takeSnapshot(event.block.timestamp.toI32())
 }
 
 export function logWithdrawn(event: LogWithdrawn): void {
     const params = event.params
     const wrId = params.wrID
 
-    const stakingSnapshot = getOrCreateFtmStakingSnapshot(event.block.timestamp.toI32())
-
-    const stakingContract = StakingContract.bind(dataSource.address())
-    const ftmPoolBalance = stakingContract.getPoolBalance()
-    const totalFtm = stakingContract.totalFTMWorth()
-    const lockedFtm = totalFtm.minus(ftmPoolBalance)
-
-    stakingSnapshot.freePoolFtmAmount = scaleDown(ftmPoolBalance, 18)
-    stakingSnapshot.lockedFtmAmount = scaleDown(lockedFtm, 18)
-    stakingSnapshot.totalFtmAmount = scaleDown(totalFtm, 18)
-    stakingSnapshot.save()
+    takeSnapshot(event.block.timestamp.toI32())
 
     const withdrawalRequest = new WithdrawalRequest(wrId.toString())
     withdrawalRequest.isWithdrawn = true
@@ -79,17 +73,7 @@ export function logWithdrawn(event: LogWithdrawn): void {
 }
 
 export function logDeposited(event: LogDeposited): void {
-    const stakingSnapshot = getOrCreateFtmStakingSnapshot(event.block.timestamp.toI32())
-
-    const stakingContract = StakingContract.bind(dataSource.address())
-    const ftmPoolBalance = stakingContract.getPoolBalance()
-    const totalFtm = stakingContract.totalFTMWorth()
-    const lockedFtm = totalFtm.minus(ftmPoolBalance)
-
-    stakingSnapshot.freePoolFtmAmount = scaleDown(ftmPoolBalance, 18)
-    stakingSnapshot.lockedFtmAmount = scaleDown(lockedFtm, 18)
-    stakingSnapshot.totalFtmAmount = scaleDown(totalFtm, 18)
-    stakingSnapshot.save()
+    takeSnapshot(event.block.timestamp.toI32())
 }
 
 export function logVaultHarvested(event: LogVaultHarvested): void {
@@ -99,8 +83,10 @@ export function logVaultHarvested(event: LogVaultHarvested): void {
         vault.isHarvested = true
         vault.save()
     } else {
-        log.error(`Harvest event on vault that was not created {}`, [vaultAddress.toString()])
+        log.critical(`Harvest event on vault that was not created {}`, [vaultAddress.toString()])
     }
+
+    takeSnapshot(event.block.timestamp.toI32())
 }
 
 export function logVaultWithdrawn(event: LogVaultWithdrawn): void {
@@ -110,8 +96,10 @@ export function logVaultWithdrawn(event: LogVaultWithdrawn): void {
         vault.isWithdrawn = true
         vault.save()
     } else {
-        log.error(`Withdrawal event on vault that was not created {}`, [vaultAddress.toString()])
+        log.critical(`Withdrawal event on vault that was not created {}`, [vaultAddress.toString()])
     }
+
+    takeSnapshot(event.block.timestamp.toI32())
 }
 
 export function logUndelegatePausedUpdated(event: LogUndelegatePausedUpdated): void {
@@ -137,4 +125,20 @@ export function logDepositLimitUpdated(event: LogDepositLimitUpdated): void {
     ftmStaking.minDepositLimit = event.params.low
     ftmStaking.maxDepositLimit = event.params.high
     ftmStaking.save()
+}
+
+function takeSnapshot(timestamp: i32): void {
+    const stakingSnapshot = getOrCreateFtmStakingSnapshot(timestamp)
+
+    const stakingContract = StakingContract.bind(dataSource.address())
+    const ftmPoolBalance = stakingContract.getPoolBalance()
+    const totalFtm = stakingContract.totalFTMWorth()
+    const lockedFtm = totalFtm.minus(ftmPoolBalance)
+    const exchangeRate = stakingContract.getExchangeRate()
+
+    stakingSnapshot.freePoolFtmAmount = scaleDown(ftmPoolBalance, 18)
+    stakingSnapshot.lockedFtmAmount = scaleDown(lockedFtm, 18)
+    stakingSnapshot.totalFtmAmount = scaleDown(totalFtm, 18)
+    stakingSnapshot.exchangeRate = scaleDown(exchangeRate, 18)
+    stakingSnapshot.save()
 }
