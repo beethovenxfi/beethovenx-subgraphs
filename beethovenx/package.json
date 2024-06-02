@@ -1,0 +1,31 @@
+{
+  "name": "changelog",
+  "private": true,
+  "license": "MIT",
+  "version": "1.0.0",
+  "author": "BeethovenX",
+  "scripts": {
+    "codegen": "graph codegen subgraph.yaml",
+    "build": "graph build subgraph.yaml",
+    "create-local": "graph create --node http://localhost:8020/ beethovenx-extended",
+    "remove-local": "graph remove --node http://localhost:8020/ beethovenx-extended",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 beethovenx-extended",
+    "create:fantom-eu": "graph create --node http://eu-node-v2.beets-ftm-node.com:8020/ changelog",
+    "create:fantom-ca": "graph create --node http://ca-node-v2.beets-ftm-node.com:8020/ changelog",
+    "deploy:fantom-eu": "graph deploy changelog subgraph.yaml --ipfs  http://eu-node-v2.beets-ftm-node.com:5001 --node  http://eu-node-v2.beets-ftm-node.com:8020/",
+    "deploy:fantom-ca": "graph deploy changelog subgraph.yaml --ipfs http://ca-node-v2.beets-ftm-node.com:5001 --node  http://ca-node-v2.beets-ftm-node.com:8020/",
+    "deploy:hosted": "yarn graph deploy beethovenxfi/beethovenx-extended --product hosted-service",
+    "prepare:rinkeby": "mustache config/rinkeby.json template.yaml > subgraph.yaml",
+    "prepare:fantom": "mustache config/fantom.json template.yaml > subgraph.yaml"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.29.1",
+    "@graphprotocol/graph-ts": "^0.26.0",
+    "ejs": "^3.1.6",
+    "handlebars": "^4.7.7",
+    "matchstick-as": "^0.3.0",
+    "mustache": "^4.2.0",
+    "prettier": "^2.0.0",
+    "typescript": "^4.0.0"
+  }
+}
