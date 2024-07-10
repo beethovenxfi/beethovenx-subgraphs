@@ -23,6 +23,7 @@ export function getOrCreateUser(id: Address): User {
     let user = User.load(id)
     if (user === null) {
         user = new User(id)
+        user.sftmxBalance = BigDecimal.zero()
         user.ftmStaking = getOrCreateFtmStaking().id
         user.save()
     }

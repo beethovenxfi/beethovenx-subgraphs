@@ -21,6 +21,7 @@ dataSources:
         - Vault
         - User
         - WithdrawalRequest
+        - Deposit
       abis:
         - name: FTMStaking
           file: ./abis/FTMStaking.json
@@ -53,6 +54,26 @@ dataSources:
           handler: logWithdrawn
         - event: LogDeposited(indexed address,uint256,uint256)
           handler: logDeposited
+  - kind: ethereum/contract
+    name: sFTMx
+    network: fantom 
+    source:
+      address: "0xd7028092c830b5C8FcE061Af2E593413EbbC1fc1"
+      abi: ERC20
+      startBlock: 36518660
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/sftmx.ts
+      entities:
+        - User
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: logTransfer
 templates:
   - kind: ethereum/contract
     name: Vault 

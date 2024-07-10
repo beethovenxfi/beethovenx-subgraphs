@@ -40,7 +40,17 @@ type Vault @entity {
 type User @entity {
   id: Bytes!
   ftmStaking: FtmStaking!
+  sftmxBalance: BigDecimal!
   withdrawalRequests: [WithdrawalRequest!] @derivedFrom(field: "user")
+  deposits: [Deposit!] @derivedFrom(field: "user")
+}
+
+type Deposit @entity {
+  id: Bytes!
+  user: User!
+  timestamp: Int!
+  ftmAmount: BigDecimal!
+  sftmxAmount: BigDecimal!
 }
 
 type WithdrawalRequest @entity {

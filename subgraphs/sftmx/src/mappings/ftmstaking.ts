@@ -10,7 +10,7 @@ import {
     LogWithdrawPausedUpdated,
     LogWithdrawn,
 } from '../../generated/FTMStaking/FTMStaking'
-import { Vault, WithdrawalRequest } from '../../generated/schema'
+import { Deposit, Vault, WithdrawalRequest } from '../../generated/schema'
 import { getOrCreateFtmStaking, getOrCreateFtmStakingSnapshot, getOrCreateUser } from '../entities'
 import { Vault as VaultContract } from '../../generated/FTMStaking/Vault'
 import { FTMStaking as StakingContract } from '../../generated/FTMStaking/FTMStaking'
@@ -73,6 +73,23 @@ export function logWithdrawn(event: LogWithdrawn): void {
 }
 
 export function logDeposited(event: LogDeposited): void {
+    const params = event.params
+    const userAddress = params.user
+    const ftmAmount = params.amount
+    const sftmxAmount = params.ftmxAmount
+
+    const user = getOrCreateUser(userAddress)
+
+    const depositId = userAddress.concatI32(event.block.timestamp.toI32())
+    const deposit = new Deposit(depositId)
+    deposit.user = user.id
+    deposit.ftmAmount = scaleDown(ftmAmount, 18)
+    deposit.sftmxAmount = scaleDown(sftmxAmount, 18)
+    deposit.timestamp = event.block.timestamp.toI32()
+    deposit.save()
+
+    user.save()
+
     takeSnapshot(event.block.timestamp.toI32())
 }
 
