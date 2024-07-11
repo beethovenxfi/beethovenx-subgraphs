@@ -15,8 +15,8 @@
     "deploy-hosted": "yarn graph deploy --product hosted-service beethovenxfi/reliquary"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.34.0",
-    "@graphprotocol/graph-ts": "^0.28.0",
+    "@graphprotocol/graph-cli": "^0.71.0",
+    "@graphprotocol/graph-ts": "^0.35.1",
     "ejs": "^3.1.6",
     "handlebars": "^4.7.7",
     "matchstick-as": "^0.3.0",
