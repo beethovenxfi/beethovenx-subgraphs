@@ -1,0 +1,7 @@
+{
+  "network": "fantom",
+  "chef-address": "0x8166994d9ebBe5829EC86Bd81258149B87faCfd3",
+  "chef-startBlock": "18508300",
+  "bar-address": "0xfcef8a994209d6916EB2C86cDD2AFD60Aa6F54b1",
+  "bar-startBlock": "22437084"
+}
