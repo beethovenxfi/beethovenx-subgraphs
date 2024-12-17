@@ -81,7 +81,7 @@ export function logUpdatePool(event: LogUpdatePool): void {
 
     const masterChef = getMasterChef(event.block)
     const pool = getPool(event.params.pid, event.block)
-    updateRewarder(Address.fromString(pool.rewarder!))
+    updateRewarder(Address.fromString(pool.rewarder!), event.block)
 
     pool.accBeetsPerShare = event.params.accBeetsPerShare
     pool.lastRewardBlock = event.params.lastRewardBlock

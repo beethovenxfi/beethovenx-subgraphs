@@ -63,6 +63,8 @@ templates:
       abis:
         - name: SingleTokenRewarder
           file: ./abis/SingleTokenRewarder.json
+        - name: MultiTokenRewarder
+          file: ./abis/MultiTokenRewarder.json
         - name: ERC20
           file: ./abis/ERC20.json
         - name: MasterChefV2
@@ -87,6 +89,8 @@ templates:
       abis:
         - name: MultiTokenRewarder
           file: ./abis/MultiTokenRewarder.json
+        - name: SingleTokenRewarder
+          file: ./abis/SingleTokenRewarder.json
         - name: ERC20
           file: ./abis/ERC20.json
         - name: MasterChefV2
