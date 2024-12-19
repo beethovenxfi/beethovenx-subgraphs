@@ -1,0 +1,37 @@
+specVersion: 0.0.4
+description: Sonictaking
+repository: https://github.com/beethovenxfi/beethovenx-token-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Sonictaking
+    network: sonic
+    source:
+      address: "0xe5da20f15420ad15de0fa650600afc998bbe3955"
+      abi: SonicStaking
+      startBlock: 454490
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/sonicstaking.ts
+      entities:
+        - SonicStaking
+        - Validator
+      abis:
+        - name: SonicStaking
+          file: ./abis/SonicStaking.json
+      eventHandlers:
+        - event: Delegated(indexed uint256,uint256)
+          handler: logDelegated
+        - event: Deposited(indexed address,uint256,uint256)
+          handler: logDeposited
+        - event: Donated(indexed address,uint256)
+          handler: logDonated
+        - event: Undelegated(indexed address,uint256,uint256,uint256,uint8)
+          handler: logUndelegated
+        - event: OperatorClawBackInitiated(indexed uint256,indexed uint256,uint256)
+          handler: logOperatorClawBackInitiated
+        - event: OperatorClawBackExecuted(indexed uint256,uint256,indexed bool)
+          handler: logOperatorClawBackExecuted

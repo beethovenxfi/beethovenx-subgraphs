@@ -1,0 +1,25 @@
+type SonicStaking @entity {
+  id: Bytes!
+
+  totalPool: BigDecimal!
+  totalDelegated: BigDecimal!
+  totalAssets: BigDecimal!
+  exchangeRate: BigDecimal!
+
+  validators: [Validator!] @derivedFrom(field: "sonicStaking")
+}
+
+type Validator @entity {
+  id: String!
+  sonicStaking: SonicStaking!
+  amountAssetsDelegated: BigDecimal!
+}
+
+type SonicStakingSnapshot @entity {
+  id: Bytes!
+  snapshotTimestamp: Int!
+  totalPool: BigDecimal!
+  totalDelegated: BigDecimal!
+  totalAssets: BigDecimal!
+  exchangeRate: BigDecimal!
+}

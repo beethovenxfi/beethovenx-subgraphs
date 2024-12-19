@@ -5,11 +5,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SonicBlocks
-    network: sonic-mainnet
+    network: sonic
     source:
       address: "0x0000000000000000000000000000000000000000"
       abi: IERC20
-      startBlock: 310000
+      startBlock: 10
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
