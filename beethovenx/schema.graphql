@@ -1,0 +1,107 @@
+type MasterChef @entity {
+  id: Bytes!
+  emissionToken: Token!
+  emissionPerBlock: BigInt!
+  totalAllocPoint: BigInt!
+  farms: [Farm!] @derivedFrom(field: "masterChef")
+  poolCount: BigInt!
+  timestamp: BigInt!
+  block: BigInt!
+
+}
+
+type Farm @entity {
+  id: Bytes!
+  farmId: BigInt!
+  masterChef: MasterChef!
+  tokenAddress: Bytes!
+  token: Token!
+  allocPoint: BigInt!
+  balance: BigDecimal!
+  rewarder: Rewarder
+  userBalances: [UserFarmBalance!]! @derivedFrom(field: "farm")
+  userCount: BigInt!
+  timestamp: BigInt!
+  block: BigInt!
+}
+
+type RewardToken @entity {
+  id: Bytes!
+  tokenAddress: Bytes!
+  token: Token!
+  rewarder: Rewarder
+  rewardPerSecond: BigDecimal!
+  timestamp: BigInt!
+  block: BigInt!
+}
+
+type Token @entity(immutable: true) {
+  id: Bytes!
+  address: Bytes!
+  name: String!
+  decimals: Int!
+  symbol: String!
+}
+
+type Rewarder @entity(immutable: true) {
+  # address
+  id: Bytes!
+  address: Bytes!
+  rewardTokens: [RewardToken!]! @derivedFrom(field: "rewarder")
+}
+
+type HarvestAction @entity(immutable: true) {
+  id: Bytes!
+  user: User
+  token: Token!
+  amount: BigDecimal!
+  timestamp: BigInt!
+  block: BigInt!
+}
+
+type UserFarmBalance @entity {
+  id: Bytes!
+  userAddress: Bytes!
+  user: User!
+  farmId: BigInt!
+  farm: Farm!
+  balance: BigDecimal!
+  timestamp: BigInt!
+  block: BigInt!
+}
+
+type User @entity(immutable: true) {
+  # Pool id concatenated with user address
+  id: Bytes!
+  address: Bytes!
+  farmBalances: [UserFarmBalance!]! @derivedFrom(field: "user")
+  governanceShareBalance: UserGovernanceShare @derivedFrom(field: "user")
+  harvests: [HarvestAction!]! @derivedFrom(field: "user")
+}
+
+type UserGovernanceShare @entity {
+  id: Bytes!
+  userAddress: Bytes!
+  user: User!
+  governanceShare: GovernanceShare!
+  balance: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+}
+
+type GovernanceShare @entity {
+  id: Bytes!
+  underlyingTokenAddress: Bytes!
+  underlyingToken: Token!
+  vestingTokenAddress: Bytes!
+  vestingToken: Token!
+  totalSupply: BigDecimal!
+  ratio: BigDecimal!
+  sharesMinted: BigDecimal!
+  sharesBurned: BigDecimal!
+  vestingTokenBalance: BigDecimal!
+  sharedVestingTokenRevenue: BigDecimal!
+  userBalances: [UserGovernanceShare!]! @derivedFrom(field: "governanceShare")
+  block: BigInt!
+  timestamp: BigInt!
+}

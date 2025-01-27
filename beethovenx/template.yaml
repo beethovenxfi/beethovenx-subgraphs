@@ -1,0 +1,133 @@
+specVersion: 0.0.4
+description: MasterChef
+repository: https://github.com/beethovenxfi/beethovenx-token-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MasterChef
+    network: {{ network }}
+    source:
+      address: "{{ chef-address }}"
+      abi: MasterChef
+      startBlock: {{ chef-startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/masterchef.ts
+      entities:
+        - MasterChef
+        - Farm
+        - UserFarmBalance
+        - HarvestAction
+        - Token
+        - User
+        - Rewarder
+        - RewardToken
+      abis:
+        - name: MasterChef
+          file: ./abis/MasterChef.json
+        - name: SingleTokenRewarder
+          file: ./abis/SingleTokenRewarder.json
+        - name: MultiTokenRewarder
+          file: ./abis/MultiTokenRewarder.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Deposit(indexed address,indexed uint256,uint256,indexed address)
+          handler: deposit
+        - event: Withdraw(indexed address,indexed uint256,uint256,indexed address)
+          handler: withdraw
+        - event: EmergencyWithdraw(indexed address,indexed uint256,uint256,indexed address)
+          handler: emergencyWithdraw
+        - event: Harvest(indexed address,indexed uint256,uint256)
+          handler: harvest
+        - event: LogPoolAddition(indexed uint256,uint256,indexed address,indexed address)
+          handler: logPoolAddition
+        - event: LogSetPool(indexed uint256,uint256,indexed address,bool)
+          handler: logSetPool
+        - event: LogUpdatePool(indexed uint256,uint256,uint256,uint256)
+          handler: logUpdatePool
+        - event: UpdateEmissionRate(indexed address,uint256)
+          handler: updateEmissionRate
+  - kind: ethereum/contract
+    name: Governancetoken
+    network: {{ network }}
+    source:
+      address: '{{ bar-address }}'
+      abi: Bar
+      startBlock: {{ bar-startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - User
+        - GovernanceToken
+        - UserGovernanceTokenBalance
+      abis:
+        - name: Bar
+          file: ./abis/BeetsBar.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: transfer
+        - event: Enter(indexed address,uint256,uint256)
+          handler: enter
+        - event: Leave(indexed address,uint256,uint256)
+          handler: leave
+        - event: ShareRevenue(uint256)
+          handler: shareRevenue
+      file: ./src/mappings/governance-token.ts
+templates:
+  - kind: ethereum/contract
+    name: SingleTokenRewarder
+    network: {{ network }}
+    source:
+      abi: SingleTokenRewarder
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/single-token-rewarder.ts
+      entities:
+        - Rewarder
+      abis:
+        - name: SingleTokenRewarder
+          file: ./abis/SingleTokenRewarder.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: MasterChef
+          file: ./abis/MasterChef.json
+      eventHandlers:
+        - event: LogRewardPerSecond(uint256)
+          handler: logRewardPerSecond
+        - event: LogOnReward(indexed address,indexed uint256,uint256,indexed address)
+          handler: logOnReward
+  - kind: ethereum/contract
+    name: MultiTokenRewarder
+    network: {{ network }}
+    source:
+      abi: MultiTokenRewarder
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/multi-token-rewarder.ts
+      entities:
+        - Rewarder
+      abis:
+        - name: MultiTokenRewarder
+          file: ./abis/MultiTokenRewarder.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: MasterChef
+          file: ./abis/MasterChef.json
+      eventHandlers:
+        - event: LogRewardsPerSecond(address[],uint256[])
+          handler: logRewardsPerSecond
+        - event: LogOnReward(indexed address,indexed uint256,address,uint256,indexed address)
+          handler: logOnReward
