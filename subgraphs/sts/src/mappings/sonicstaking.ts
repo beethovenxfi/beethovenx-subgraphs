@@ -6,10 +6,11 @@ import {
     OperatorClawBackExecuted,
     Deposited,
     Donated,
+    RewardsClaimed,
 } from '../../generated/Sonictaking/SonicStaking'
 
 import { SonicStaking as StakingContract } from '../../generated/Sonictaking/SonicStaking'
-import { getOrCreateSonicStaking, getOrCreateSonicStakingSnapshot, getOrCreateValidator } from '../entities'
+import { getOrCreateRewardsClaimed, getOrCreateSonicStaking, getOrCreateSonicStakingSnapshot, getOrCreateValidator } from '../entities'
 import { scaleDown } from '../utils/numbers'
 
 export function logDeposited(event: Deposited): void {
@@ -71,6 +72,30 @@ export function logOperatorClawBackExecuted(event: OperatorClawBackExecuted): vo
     takeSnapshot(event.block.timestamp.toI32())
 }
 
+export function logRewardsClaimed(event: RewardsClaimed): void {
+    const params = event.params
+    const amountClaimed = scaleDown(params.amountClaimed, 18)
+    const protocolFee = scaleDown(params.protocolFee, 18)
+
+    const rewardsClaimed = getOrCreateRewardsClaimed(event.transaction.hash)
+    rewardsClaimed.amountClaimed = amountClaimed
+    rewardsClaimed.protocolFee = protocolFee
+    rewardsClaimed.timestamp = event.block.timestamp.toI32()
+    rewardsClaimed.save()
+
+    const staking = getOrCreateSonicStaking()
+    staking.totalRewardsClaimed = staking.totalRewardsClaimed.plus(amountClaimed)
+    staking.totalProtocolFee = staking.totalProtocolFee.plus(protocolFee)
+    staking.save()
+
+    const stakingSnapshot = getOrCreateSonicStakingSnapshot(event.block.timestamp.toI32())
+    stakingSnapshot.totalRewardsClaimed = staking.totalRewardsClaimed
+    stakingSnapshot.totalProtocolFee = staking.totalProtocolFee
+    stakingSnapshot.rewardsClaimed24h = stakingSnapshot.rewardsClaimed24h.plus(amountClaimed)
+    stakingSnapshot.protocolFee24h = stakingSnapshot.protocolFee24h.plus(protocolFee)
+    stakingSnapshot.save()
+}
+
 function takeSnapshot(timestamp: i32): void {
     const stakingSnapshot = getOrCreateSonicStakingSnapshot(timestamp)
 
@@ -92,5 +117,6 @@ function updateStakingEntity(): void {
     staking.totalDelegated = scaleDown(stakingContract.totalDelegated(), 18)
     staking.totalAssets = scaleDown(stakingContract.totalAssets(), 18)
     staking.exchangeRate = scaleDown(stakingContract.getRate(), 18)
+
     staking.save()
 }
