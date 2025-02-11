@@ -1,5 +1,5 @@
 import { dataSource, BigDecimal, Bytes } from '@graphprotocol/graph-ts'
-import { SonicStaking, SonicStakingSnapshot, Validator, RewardsClaimed } from '../../generated/schema'
+import { SonicStaking, SonicStakingSnapshot, Validator } from '../../generated/schema'
 
 const DAY = 24 * 60 * 60
 

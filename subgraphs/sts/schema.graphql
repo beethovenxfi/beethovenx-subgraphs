@@ -31,10 +31,3 @@ type SonicStakingSnapshot @entity {
   rewardsClaimed24h: BigDecimal!
   protocolFee24h: BigDecimal!
 }
-
-type RewardsClaimed @entity {
-  id: Bytes!
-  amountClaimed: BigDecimal!
-  protocolFee: BigDecimal!
-  timestamp: Int!
-}
