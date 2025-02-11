@@ -55,17 +55,3 @@ export function getOrCreateSonicStakingSnapshot(timestamp: i32): SonicStakingSna
     }
     return snapshot
 }
-
-export function getOrCreateRewardsClaimed(transactionHash: Bytes): RewardsClaimed {
-    let rewardsClaimed = RewardsClaimed.load(transactionHash)
-
-    if (rewardsClaimed === null) {
-        rewardsClaimed = new RewardsClaimed(transactionHash)
-        rewardsClaimed.amountClaimed = BigDecimal.zero()
-        rewardsClaimed.protocolFee = BigDecimal.zero()
-        rewardsClaimed.timestamp = 0
-        rewardsClaimed.save()
-    }
-
-    return rewardsClaimed
-}
