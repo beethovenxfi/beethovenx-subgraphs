@@ -6,6 +6,7 @@ import {
     OperatorClawBackExecuted,
     Deposited,
     Donated,
+    RewardsClaimed,
 } from '../../generated/Sonictaking/SonicStaking'
 
 import { SonicStaking as StakingContract } from '../../generated/Sonictaking/SonicStaking'
@@ -14,12 +15,12 @@ import { scaleDown } from '../utils/numbers'
 
 export function logDeposited(event: Deposited): void {
     updateStakingEntity()
-    takeSnapshot(event.block.timestamp.toI32())
+    takeSnapshotWithOnchainValues(event.block.timestamp.toI32())
 }
 
 export function logDonated(event: Donated): void {
     updateStakingEntity()
-    takeSnapshot(event.block.timestamp.toI32())
+    takeSnapshotWithOnchainValues(event.block.timestamp.toI32())
 }
 
 export function logDelegated(event: Delegated): void {
@@ -34,7 +35,7 @@ export function logDelegated(event: Delegated): void {
     validator.save()
 
     updateStakingEntity()
-    takeSnapshot(event.block.timestamp.toI32())
+    takeSnapshotWithOnchainValues(event.block.timestamp.toI32())
 }
 
 export function logUndelegated(event: Undelegated): void {
@@ -49,7 +50,7 @@ export function logUndelegated(event: Undelegated): void {
     validator.save()
 
     updateStakingEntity()
-    takeSnapshot(event.block.timestamp.toI32())
+    takeSnapshotWithOnchainValues(event.block.timestamp.toI32())
 }
 
 export function logOperatorClawBackInitiated(event: OperatorClawBackInitiated): void {
@@ -63,15 +64,36 @@ export function logOperatorClawBackInitiated(event: OperatorClawBackInitiated): 
 
     validator.save()
     updateStakingEntity()
-    takeSnapshot(event.block.timestamp.toI32())
+    takeSnapshotWithOnchainValues(event.block.timestamp.toI32())
 }
 
 export function logOperatorClawBackExecuted(event: OperatorClawBackExecuted): void {
     updateStakingEntity()
-    takeSnapshot(event.block.timestamp.toI32())
+    takeSnapshotWithOnchainValues(event.block.timestamp.toI32())
 }
 
-function takeSnapshot(timestamp: i32): void {
+export function logRewardsClaimed(event: RewardsClaimed): void {
+    const params = event.params
+    const amountClaimed = scaleDown(params.amountClaimed, 18)
+    const protocolFee = scaleDown(params.protocolFee, 18)
+
+    const staking = getOrCreateSonicStaking()
+    staking.totalRewardsClaimed = staking.totalRewardsClaimed.plus(amountClaimed)
+    staking.totalProtocolFee = staking.totalProtocolFee.plus(protocolFee)
+    staking.save()
+
+    const stakingSnapshot = getOrCreateSonicStakingSnapshot(event.block.timestamp.toI32())
+    stakingSnapshot.totalRewardsClaimed = staking.totalRewardsClaimed
+    stakingSnapshot.totalProtocolFee = staking.totalProtocolFee
+    stakingSnapshot.rewardsClaimed24h = stakingSnapshot.rewardsClaimed24h.plus(amountClaimed)
+    stakingSnapshot.protocolFee24h = stakingSnapshot.protocolFee24h.plus(protocolFee)
+    stakingSnapshot.save()
+
+    takeSnapshotWithOnchainValues(event.block.timestamp.toI32())
+    updateStakingEntity()
+}
+
+function takeSnapshotWithOnchainValues(timestamp: i32): void {
     const stakingSnapshot = getOrCreateSonicStakingSnapshot(timestamp)
 
     const stakingContract = StakingContract.bind(dataSource.address())
@@ -80,6 +102,7 @@ function takeSnapshot(timestamp: i32): void {
     stakingSnapshot.totalDelegated = scaleDown(stakingContract.totalDelegated(), 18)
     stakingSnapshot.totalAssets = scaleDown(stakingContract.totalAssets(), 18)
     stakingSnapshot.exchangeRate = scaleDown(stakingContract.getRate(), 18)
+
     stakingSnapshot.save()
 }
 
@@ -92,5 +115,6 @@ function updateStakingEntity(): void {
     staking.totalDelegated = scaleDown(stakingContract.totalDelegated(), 18)
     staking.totalAssets = scaleDown(stakingContract.totalAssets(), 18)
     staking.exchangeRate = scaleDown(stakingContract.getRate(), 18)
+
     staking.save()
 }

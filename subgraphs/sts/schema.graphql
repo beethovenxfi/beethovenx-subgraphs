@@ -6,6 +6,9 @@ type SonicStaking @entity {
   totalAssets: BigDecimal!
   exchangeRate: BigDecimal!
 
+  totalRewardsClaimed: BigDecimal!
+  totalProtocolFee: BigDecimal!
+
   validators: [Validator!] @derivedFrom(field: "sonicStaking")
 }
 
@@ -22,4 +25,9 @@ type SonicStakingSnapshot @entity {
   totalDelegated: BigDecimal!
   totalAssets: BigDecimal!
   exchangeRate: BigDecimal!
+
+  totalRewardsClaimed: BigDecimal!
+  totalProtocolFee: BigDecimal!
+  rewardsClaimed24h: BigDecimal!
+  protocolFee24h: BigDecimal!
 }

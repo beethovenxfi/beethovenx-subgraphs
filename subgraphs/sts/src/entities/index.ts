@@ -1,4 +1,4 @@
-import { dataSource, BigDecimal } from '@graphprotocol/graph-ts'
+import { dataSource, BigDecimal, Bytes } from '@graphprotocol/graph-ts'
 import { SonicStaking, SonicStakingSnapshot, Validator } from '../../generated/schema'
 
 const DAY = 24 * 60 * 60
@@ -13,6 +13,8 @@ export function getOrCreateSonicStaking(): SonicStaking {
         sonicStaking.totalAssets = BigDecimal.zero()
         sonicStaking.totalDelegated = BigDecimal.zero()
         sonicStaking.exchangeRate = BigDecimal.zero()
+        sonicStaking.totalRewardsClaimed = BigDecimal.zero()
+        sonicStaking.totalProtocolFee = BigDecimal.zero()
         sonicStaking.save()
     }
     return sonicStaking
@@ -45,7 +47,25 @@ export function getOrCreateSonicStakingSnapshot(timestamp: i32): SonicStakingSna
         snapshot.totalAssets = BigDecimal.zero()
         snapshot.totalDelegated = BigDecimal.zero()
         snapshot.exchangeRate = BigDecimal.zero()
+        snapshot.totalRewardsClaimed = BigDecimal.zero()
+        snapshot.totalProtocolFee = BigDecimal.zero()
+        snapshot.rewardsClaimed24h = BigDecimal.zero()
+        snapshot.protocolFee24h = BigDecimal.zero()
         snapshot.save()
     }
     return snapshot
+}
+
+export function getOrCreateRewardsClaimed(transactionHash: Bytes): RewardsClaimed {
+    let rewardsClaimed = RewardsClaimed.load(transactionHash)
+
+    if (rewardsClaimed === null) {
+        rewardsClaimed = new RewardsClaimed(transactionHash)
+        rewardsClaimed.amountClaimed = BigDecimal.zero()
+        rewardsClaimed.protocolFee = BigDecimal.zero()
+        rewardsClaimed.timestamp = 0
+        rewardsClaimed.save()
+    }
+
+    return rewardsClaimed
 }
