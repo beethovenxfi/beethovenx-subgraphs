@@ -1,0 +1,14 @@
+type FeeM @entity {
+  id: String!
+  totalContracts: Int!
+}
+
+type Project @entity {
+  id: String!
+  enabled: Boolean!
+  metadataUri: String!
+  activeFromEpoch: Int!
+  activeToEpoch: Int!
+  contracts: [String!]!
+  numberOfContracts: Int!
+}

@@ -1,0 +1,23 @@
+{
+  "name": "reliquary",
+  "private": true,
+  "license": "MIT",
+  "version": "1.0.0",
+  "author": "BeethovenX",
+  "scripts": {
+    "codegen": "graph codegen subgraph.yaml",
+    "build": "graph build subgraph.yaml",
+    "auth-hosted": "yarn graph auth --product hosted-service",
+    "deploy-hosted": "yarn graph deploy --product hosted-service beethovenxfi/sftmx"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.71.0",
+    "@graphprotocol/graph-ts": "^0.35.1",
+    "ejs": "^3.1.6",
+    "handlebars": "^4.7.7",
+    "matchstick-as": "^0.3.0",
+    "mustache": "^4.2.0",
+    "prettier": "^2.0.0",
+    "typescript": "^4.0.0"
+  }
+}
